@@ -127,6 +127,11 @@
             overflow-x: hidden;
         }
 
+        /* 手機防撐寬：支援 clip 的瀏覽器以 clip 取代 hidden（不會讓頁首的 sticky 失效） */
+        @supports (overflow-x: clip) {
+            html, body { overflow-x: clip; }
+        }
+
         /* 中文字體沒有真斜體：全站取消 italic，改以字距與色階區分語氣 */
         .italic, em, i { font-style: normal !important; letter-spacing: 0.03em; }
         .font-mono { letter-spacing: 0.06em; }
@@ -331,7 +336,7 @@
         }
         .night-bloom { animation: nightBloomGlow 5.5s ease-in-out infinite; }
         @media (max-width: 640px) {
-            .botanical-left, .botanical-right { display: none; } /* 手機版：兩側植物會擠壓主舞台，隱藏 */
+            .botanical-frame, .botanical-left, .botanical-right { display: none; } /* 手機版：兩側植物連同外框整個隱藏，避免撐寬頁面 */
         }
         .ico { display: inline-block; width: 1.05em; height: 1.05em; vertical-align: -0.17em; }
         .specimen-sigil { display: inline-flex; width: 15px; height: 15px; opacity: 0.85; vertical-align: -2px; }
@@ -681,7 +686,7 @@
         /* ==========================================================================
            #228 首屏景深視差
            ========================================================================== */
-        .hero-depth { isolation: isolate; }
+        .hero-depth { isolation: isolate; overflow: hidden; }
         .hero-layer { will-change: transform; pointer-events: none; }
         .hero-far { position: absolute; inset: -10% -6% 0; z-index: 0; }
         .hero-candle-glow {
@@ -1171,7 +1176,7 @@
         </div>
 
         <!-- 鐘罩下的標本銘牌 -->
-        <p class="hero-plaque font-display text-[10px] sm:text-xs tracking-[0.2em] sm:tracking-[0.42em] px-2 uppercase mt-4 opacity-85" style="color: var(--accent-metal);">
+        <p class="hero-plaque font-display text-[9px] sm:text-xs tracking-[0.12em] sm:tracking-[0.42em] px-1 uppercase mt-4 opacity-85" style="color: var(--accent-metal);">
             Emotional &amp; Taste Anatomy Gourmet · Birthday Banquet
         </p>
 
@@ -1720,7 +1725,7 @@
                 <span class="course-text"><span class="course-numeral">IV</span><span class="course-name">甜點</span><span class="course-fr">Dessert</span></span>
                 <span class="course-rule"></span>
             </div>
-            <div class="px-6 sm:px-12">
+            <div class="px-7 sm:px-12">
                 <div class="border-b pb-5 mb-8" style="border-color: var(--border-dim);">
                     <div>
                         <h2 class="heisei-title text-3xl sm:text-4xl font-bold">
@@ -1734,7 +1739,7 @@
                 </div>
 
                 <!-- 3D 雙頁燙金食譜舞台：「＜」「＞」懸在兩側留白處，不佔用食譜寬度；首尾無限循環 -->
-                <div class="relative max-w-5xl mx-auto">
+                <div class="relative max-w-5xl mx-7 sm:mx-auto">
                 <button type="button" id="compendiumPrevBtn" onclick="turnCompendiumPage(-1)" aria-label="上一頁" class="recipe-turn-btn recipe-turn-prev">＜</button>
                 <div class="compendium-book-stage">
                     <div id="compendiumLedger" class="grid grid-cols-1 md:grid-cols-2 rounded-2xl border-2 overflow-hidden shadow-2xl relative" style="background-color: var(--parchment-bg); border-color: var(--border-bright); box-shadow: 0 30px 60px -15px rgba(0,0,0,0.88);">
@@ -5105,20 +5110,16 @@
 
             const words = ['標本與殘骸', 'SPECIMENS', '& REMAINS', 'LA TABLE', '苦艾 · 夜來香', 'PNEUMA'];
             sizeParallaxLayers();
-            // 避開首屏：首屏只保留 #228 一種景深
-            const heroEl = document.getElementById('heroDepth');
-            const heroBottom = heroEl ? heroEl.getBoundingClientRect().bottom + window.scrollY + 40 : 0;
-            const midH = parseFloat(mid.style.height) || window.innerHeight * 2;
-            const minMidPct = Math.min(60, heroBottom / midH * 100);
+            // 避開首屏：位置以「首屏底部之下的比例」記錄，實際的首屏高度由 --hero-safe 在每次版面變動時更新
+            const safeTop = f => `calc(var(--hero-safe, 0px) + (100% - var(--hero-safe, 0px)) * ${f.toFixed(4)})`;
             // 遠景大字約每 0.85 個視窗高度出現一次，左右交錯
             const farH = parseFloat(far.style.height) || window.innerHeight * 2;
             const wordCount = Math.max(3, Math.round(farH / (window.innerHeight * 0.85)));
             let farHtml = '';
             for (let i = 0; i < wordCount; i++) {
                 const leftSide = i % 2 === 0;
-                const minFarPct = Math.min(60, heroBottom / farH * 100);
-                const top = minFarPct + (i + 0.15 + rand() * 0.4) / wordCount * (100 - minFarPct);
-                farHtml += `<span class="parallax-far-word" style="top:${top.toFixed(1)}%; ${leftSide ? 'left' : 'right'}:${(-4 + rand() * 10).toFixed(1)}%;">${words[i % words.length]}</span>`;
+                const f = (i + 0.15 + rand() * 0.4) / wordCount;
+                farHtml += `<span class="parallax-far-word" style="top:${safeTop(f)}; ${leftSide ? 'left' : 'right'}:${(-4 + rand() * 10).toFixed(1)}%;">${words[i % words.length]}</span>`;
             }
             far.innerHTML = farHtml;
 
@@ -5131,15 +5132,15 @@
                 const x = rand() < 0.7
                     ? (rand() < 0.5 ? rand() * 16 : 84 + rand() * 14)
                     : 10 + rand() * 80;
-                const y = minMidPct + (i + rand()) / count * (100 - minMidPct);
+                const yf = (i + rand()) / count;
                 const rot = (rand() - 0.5) * 90;
                 const flip = rand() < 0.5 ? -1 : 1;
                 const op = 0.14 + rand() * 0.2;
-                midHtml += `<span class="scatter-sprig" style="left:${x.toFixed(2)}%; top:${y.toFixed(2)}%; width:${(size * (isWormwood ? 0.58 : 0.67)).toFixed(0)}px; height:${size.toFixed(0)}px; opacity:${op.toFixed(2)}; transform: translate(-50%, -50%) rotate(${rot.toFixed(1)}deg) scaleX(${flip});">${isWormwood ? buildMiniWormwood(rand) : buildMiniTuberose(rand)}</span>`;
+                midHtml += `<span class="scatter-sprig" style="left:${x.toFixed(2)}%; top:${safeTop(yf)}; width:${(size * (isWormwood ? 0.58 : 0.67)).toFixed(0)}px; height:${size.toFixed(0)}px; opacity:${op.toFixed(2)}; transform: translate(-50%, -50%) rotate(${rot.toFixed(1)}deg) scaleX(${flip});">${isWormwood ? buildMiniWormwood(rand) : buildMiniTuberose(rand)}</span>`;
             }
             for (let i = 0; i < count * 1.4; i++) {
                 const d = 1.5 + rand() * 2.5;
-                midHtml += `<span class="scatter-dot" style="left:${(rand() * 100).toFixed(2)}%; top:${(minMidPct + rand() * (100 - minMidPct)).toFixed(2)}%; width:${d.toFixed(1)}px; height:${d.toFixed(1)}px; opacity:${(0.12 + rand() * 0.3).toFixed(2)};"></span>`;
+                midHtml += `<span class="scatter-dot" style="left:${(rand() * 100).toFixed(2)}%; top:${safeTop(rand())}; width:${d.toFixed(1)}px; height:${d.toFixed(1)}px; opacity:${(0.12 + rand() * 0.3).toFixed(2)};"></span>`;
             }
             mid.innerHTML = midHtml;
             sizeParallaxLayers();
@@ -5153,6 +5154,11 @@
             const maxScroll = Math.max(0, document.documentElement.scrollHeight - vh);
             far.style.height = `${Math.ceil(vh + maxScroll * PARALLAX_SPEED.far + 40)}px`;
             mid.style.height = `${Math.ceil(vh + maxScroll * PARALLAX_SPEED.mid + 40)}px`;
+            // 首屏安全區：以目前實際的首屏底部為準（樣式載入、字級或視窗改變後都會重算）
+            const heroEl = document.getElementById('heroDepth');
+            const safe = heroEl ? Math.ceil(heroEl.getBoundingClientRect().bottom + window.scrollY + 70) : 0;
+            far.style.setProperty('--hero-safe', `${safe}px`);
+            mid.style.setProperty('--hero-safe', `${safe}px`);
         }
 
         function setupParallaxLayers() {
