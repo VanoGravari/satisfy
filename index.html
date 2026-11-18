@@ -788,6 +788,65 @@
         .flip-card-scene:hover .card-hint, .flip-card-scene:focus-visible .card-hint { opacity: 1; transform: none; }
         @media (hover: none) { .card-hint { display: none; } }
 
+        /* 食譜：食材清單（手機菜單卡與電腦版食譜書共用） */
+        .rm-label { font-size: 0.68rem; letter-spacing: 0.45em; padding-left: 0.45em; color: var(--accent-metal); margin: 0.9rem 0 0.35rem; }
+        .rm-ingredients { list-style: none; margin: 0 auto; max-width: 15.5rem; font-size: 0.8rem; color: var(--text-sub); }
+        .rm-ingredients li { display: flex; align-items: baseline; gap: 0.4rem; line-height: 1.95; }
+        .rm-ingredients li .n { white-space: nowrap; color: var(--text-main); }
+        .rm-ingredients li .d { flex: 1; border-bottom: 1px dotted var(--border-dim); transform: translateY(-0.28em); min-width: 0.8rem; }
+        .rm-ingredients li .q { white-space: nowrap; font-family: 'Cormorant Garamond', 'Shippori Mincho', serif; color: var(--accent-metal); }
+        .rm-ingredients.book { max-width: none; }
+
+        /* 手機版套餐菜單卡：雙線框菜單 ＋ 單頁翻書的書脊陰影與捲起頁角 */
+        .recipe-menu {
+            position: relative;
+            padding: 6px;
+            border: 1px solid var(--border-bright);
+            border-radius: 3px 10px 10px 3px;
+            background: var(--parchment-bg);
+            box-shadow: inset 16px 0 20px -12px rgba(0, 0, 0, 0.9), 0 20px 36px -14px rgba(0, 0, 0, 0.85);
+        }
+        .recipe-menu::before {
+            content: '';
+            position: absolute;
+            left: 7px; top: 0; bottom: 0;
+            width: 1px;
+            background: var(--border-dim);
+            pointer-events: none;
+        }
+        .recipe-menu-inner {
+            border: 1px solid var(--border-dim);
+            padding: 1.4rem 1.1rem 2.2rem 1.35rem;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.16);
+        }
+        .rm-k { font-family: 'Cormorant Garamond', serif; font-size: 0.68rem; letter-spacing: 0.4em; color: var(--accent-metal); }
+        .rm-title { font-family: 'Shippori Mincho', 'Noto Serif TC', serif; font-size: 1.35rem; font-weight: 700; letter-spacing: 0.2em; padding-left: 0.2em; margin: 0.5rem 0 0.2rem; color: var(--text-main); }
+        .rm-orn { color: var(--accent-metal); font-size: 0.75rem; margin: 0.35rem 0; }
+        .rm-visual { margin: 1rem auto 0.9rem; width: 11rem; height: 7rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden;
+            background: radial-gradient(ellipse at 50% 60%, var(--spotlight-tint), rgba(0, 0, 0, 0.35) 72%); }
+        .rm-visual .line-art { width: 92%; height: 92%; }
+        .rm-visual img { width: 100%; height: 100%; object-fit: cover; }
+        .rm-visual .vessel { width: 3.6rem; height: 4.5rem; filter: drop-shadow(0 0 14px var(--glow-shadow)); }
+        .rm-text { line-height: 1.95; color: var(--text-main); }
+        .rm-text.clamped { display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden; }
+        .rm-more { margin-top: 0.4rem; font-size: 0.72rem; letter-spacing: 0.15em; color: var(--accent-metal); text-decoration: underline dotted; text-underline-offset: 4px; }
+        .rm-note { line-height: 1.8; color: var(--text-sub); margin-top: 0.4rem; }
+        .rm-note-k { color: var(--accent-metal); margin-right: 0.5em; padding-right: 0.5em; border-right: 1px solid var(--border-dim); }
+        .rm-sign { margin-top: 0.9rem; font-family: 'Cormorant Garamond', 'Shippori Mincho', serif; font-size: 1rem; letter-spacing: 0.2em; color: var(--accent-metal); }
+        .rm-meta { margin-top: 0.15rem; font-size: 0.68rem; letter-spacing: 0.12em; color: var(--text-sub); opacity: 0.7; }
+        .rm-find { margin-top: 0.8rem; font-size: 0.72rem; letter-spacing: 0.15em; color: var(--accent-metal); opacity: 0.8; text-decoration: underline dotted; text-underline-offset: 4px; }
+        .rm-curl {
+            position: absolute;
+            right: -1px; bottom: -1px;
+            width: 42px; height: 42px;
+            border-top-left-radius: 7px;
+            background: linear-gradient(135deg, transparent 49%, var(--accent-primary) 50%, var(--bg-secondary) 100%);
+            box-shadow: -5px -5px 12px rgba(0, 0, 0, 0.45);
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+        .rm-curl:active, .rm-curl:hover { width: 52px; height: 52px; }
+
         /* 字級：只作用在閱讀文字 */
         .rs { font-size: calc(var(--rs) * var(--reading-scale, 1)) !important; }
         .rs-card { --rs: 0.94rem; }
@@ -1742,7 +1801,7 @@
                 <div class="relative max-w-5xl mx-7 sm:mx-auto">
                 <button type="button" id="compendiumPrevBtn" onclick="turnCompendiumPage(-1)" aria-label="上一頁" class="recipe-turn-btn recipe-turn-prev">＜</button>
                 <div class="compendium-book-stage">
-                    <div id="compendiumLedger" class="grid grid-cols-1 md:grid-cols-2 rounded-2xl border-2 overflow-hidden shadow-2xl relative" style="background-color: var(--parchment-bg); border-color: var(--border-bright); box-shadow: 0 30px 60px -15px rgba(0,0,0,0.88);">
+                    <div id="compendiumLedger" class="hidden sm:grid grid-cols-1 md:grid-cols-2 rounded-2xl border-2 overflow-hidden shadow-2xl relative" style="background-color: var(--parchment-bg); border-color: var(--border-bright); box-shadow: 0 30px 60px -15px rgba(0,0,0,0.88);">
                         
                         <div class="hidden md:block absolute inset-y-0 left-1/2 -translate-x-1/2 w-8 pointer-events-none z-20" style="background: linear-gradient(90deg, transparent, rgba(0,0,0,0.58) 50%, transparent);"></div>
 
@@ -1755,6 +1814,10 @@
                                 </div>
 
                                 <div id="bookVisualFrame" class="rounded-xl overflow-hidden h-64 sm:h-72 flex items-center justify-center relative" style="background-color: rgba(0,0,0,0.34);"></div>
+                                <div class="book-ingredients mt-5">
+                                    <p class="rm-label text-left">食材</p>
+                                    <ul class="rm-ingredients book" id="bookIngredients"></ul>
+                                </div>
                             </div>
 
                             <div class="mt-5 pt-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 text-xs font-mono opacity-80" >
@@ -1788,6 +1851,30 @@
                             </button>
                         </div>
                     </div>
+
+                    <!-- 手機版：套餐菜單卡 -->
+                    <article id="recipeMenuCard" class="recipe-menu sm:hidden" aria-live="polite">
+                        <div class="recipe-menu-inner">
+                            <p class="rm-k" id="rmSerial">SPECIMEN · 001</p>
+                            <h3 class="rm-title" id="rmTitle">致幻苦艾淚滴</h3>
+                            <div class="rm-orn" aria-hidden="true">— ❖ —</div>
+
+                            <p class="rm-label">食材</p>
+                            <ul class="rm-ingredients" id="rmIngredients"></ul>
+
+                            <div class="rm-visual" id="rmVisual"></div>
+
+                            <p class="rm-text clamped rs rs-card" id="rmBlessing"></p>
+                            <button type="button" class="rm-more hidden" id="rmMoreBtn" onclick="toggleRecipeFullText()">閱讀全文</button>
+
+                            <div class="rm-orn" aria-hidden="true">· · ·</div>
+                            <p class="rm-note rs rs-note"><span class="rm-note-k">美食家筆記</span><span id="rmCritique"></span></p>
+                            <p class="rm-sign" id="rmDonor">Lady E.</p>
+                            <p class="rm-meta" id="rmMeta"></p>
+                            <button type="button" class="rm-find" onclick="findSpecimenInArchive()">在館藏中找到這一枚</button>
+                        </div>
+                        <button type="button" class="rm-curl" onclick="turnCompendiumPage(1)" aria-label="翻到下一頁"></button>
+                    </article>
                 </div>
                 <button type="button" id="compendiumNextBtn" onclick="turnCompendiumPage(1)" aria-label="下一頁" class="recipe-turn-btn recipe-turn-next">＞</button>
                 </div>
@@ -3813,6 +3900,10 @@
             document.getElementById('bookBlessingText').textContent = `「${spec.message}」`;
             document.getElementById('bookConsultantCritique').textContent = spec.critique || generateDefaultCritique(spec.category, spec.donor);
 
+            const bookIngredients = document.getElementById('bookIngredients');
+            if (bookIngredients) bookIngredients.innerHTML = ingredientsHTML(spec);
+            renderRecipeMenuCard(spec, direction);
+
             const visualFrame = document.getElementById('bookVisualFrame');
             if (isLineArt(spec.image)) {
                 visualFrame.innerHTML = `<div class="art-plate w-full h-full">${getLineArtSVG(spec.image.slice(4))}</div>`;
@@ -3831,6 +3922,83 @@
                     </div>
                 `;
             }
+        }
+
+        // 每一道標本的食材：第一項的比例取自該標本的苦澀純度
+        const RECIPE_INGREDIENTS = {
+            '迷幻': [['低溫苦艾冷萃', '{p}%'], ['未乾的淚腺', '一滴'], ['說謊時慢半拍的呼吸', '半拍'], ['藍霧', '少許']],
+            '狂熱': [['熾熱蠟淚', '{p}%'], ['陳年紅酒醬汁', '一匙'], ['沸騰的脈搏', '一百一十八下'], ['炙燒焦糖', '適量']],
+            '崩潰': [['黑曜碎晶', '{p}%'], ['粗粒海鹽', '一撮'], ['防線碎裂的清響', '一聲'], ['冰鎮銀匙', '一支']],
+            '腐敗': [['純苦黑可可', '{p}%'], ['凋零的絲絨玫瑰', '三瓣'], ['緩慢氧化的哀愁', '一整夜'], ['煙燻可可脂', '少許']]
+        };
+
+        function getRecipeIngredients(spec) {
+            const list = RECIPE_INGREDIENTS[spec.category] || RECIPE_INGREDIENTS['迷幻'];
+            const m = String(spec.flavorNote || '').match(/(\d{2,3})%/);
+            const pct = m ? m[1] : String(FLAVOR_META[spec.category]?.bitterness || 80);
+            return list.map(([name, qty]) => [name, qty.replace('{p}', pct)]);
+        }
+
+        function ingredientsHTML(spec) {
+            return getRecipeIngredients(spec).map(([n, q]) =>
+                `<li><span class="n">${escapeHTML(n)}</span><span class="d"></span><span class="q">${escapeHTML(q)}</span></li>`).join('');
+        }
+
+        function getDishName(spec) {
+            const note = spec.flavorNote || FLAVOR_META[spec.category]?.subtitle || spec.category;
+            return String(note).split('·')[0].trim();
+        }
+
+        function renderRecipeMenuCard(spec, direction) {
+            const card = document.getElementById('recipeMenuCard');
+            if (!card) return;
+            if (direction) {
+                card.classList.remove('book-flip-next', 'book-flip-prev');
+                void card.offsetWidth;
+                card.classList.add(direction === 'next' ? 'book-flip-next' : 'book-flip-prev');
+            }
+            const serial = (String(spec.id).match(/#(.+)$/) || [, spec.id])[1];
+            document.getElementById('rmSerial').textContent = `SPECIMEN · ${serial}`;
+            document.getElementById('rmTitle').textContent = getDishName(spec);
+            document.getElementById('rmIngredients').innerHTML = ingredientsHTML(spec);
+            const visual = document.getElementById('rmVisual');
+            if (isLineArt(spec.image)) {
+                visual.innerHTML = getLineArtSVG(spec.image.slice(4));
+            } else if (spec.image) {
+                visual.innerHTML = `<img src="${spec.image}" alt="${escapeHTML(spec.donor)} 的影像證物" onerror="this.remove()">`;
+            } else {
+                visual.innerHTML = `<div class="vessel">${getVesselSVG(spec.category, 'w-full h-full')}</div>`;
+            }
+            const text = document.getElementById('rmBlessing');
+            text.textContent = `「${spec.message}」`;
+            text.classList.add('clamped');
+            document.getElementById('rmCritique').textContent = spec.critique || generateDefaultCritique(spec.category, spec.donor);
+            document.getElementById('rmDonor').textContent = spec.donor;
+            document.getElementById('rmMeta').textContent = `${spec.category} · ${spec.timestamp || '2026.11.19'}`;
+            const more = document.getElementById('rmMoreBtn');
+            more.textContent = '閱讀全文';
+            requestAnimationFrame(() => more.classList.toggle('hidden', text.scrollHeight <= text.clientHeight + 2));
+        }
+
+        function toggleRecipeFullText() {
+            const text = document.getElementById('rmBlessing');
+            const more = document.getElementById('rmMoreBtn');
+            const clamped = text.classList.toggle('clamped');
+            more.textContent = clamped ? '閱讀全文' : '收起';
+        }
+
+        // 手機上左右滑動翻頁
+        function setupRecipeSwipe() {
+            const card = document.getElementById('recipeMenuCard');
+            if (!card) return;
+            let x0 = null, y0 = null;
+            card.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+            card.addEventListener('touchend', e => {
+                if (x0 === null) return;
+                const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+                if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.4) turnCompendiumPage(dx < 0 ? 1 : -1);
+                x0 = y0 = null;
+            }, { passive: true });
         }
 
         function turnCompendiumPage(delta) {
@@ -5422,6 +5590,7 @@
             setupSheetsSync();
             setupDonorSearch();
             setupScrollJumpRail();
+            setupRecipeSwipe();
             animateSporeNetwork();
             startOpeningCeremony();
         });
