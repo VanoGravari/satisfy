@@ -270,9 +270,9 @@
         .night-bloom { animation-play-state: paused; }
         .arbor-stage-box:hover .ornament-pendulum,
         .arbor-stage-box:hover .vein-flow-pulse,
-        .arbor-stage-box:hover .botanical-left,
-        .arbor-stage-box:hover .botanical-right,
-        .arbor-stage-box:hover .night-bloom { animation-play-state: running; }
+        .stage-shell:hover .botanical-left,
+        .stage-shell:hover .botanical-right,
+        .stage-shell:hover .night-bloom { animation-play-state: running; }
         .vein-pulse-group { opacity: 0; transition: opacity 0.8s ease; }
         .arbor-stage-box:hover .vein-pulse-group { opacity: 1; }
         .ornament-node:hover .ornament-pendulum {
@@ -315,12 +315,13 @@
         .ghost-dinnerware.is-dining { opacity: 0.6; filter: drop-shadow(0 0 14px var(--glow-shadow)); }
 
         /* 餐桌陳列兩側：苦艾 × 夜來香 */
-        .botanical-left  { width: clamp(110px, 19%, 230px); height: 82%; opacity: 0.5; }
-        .botanical-right { width: clamp(110px, 19%, 230px); height: 74%; opacity: 0.5; }
+        .botanical-frame { inset: 0 -2.6rem; z-index: 20; }
+        .botanical-left  { width: clamp(96px, 15%, 200px); height: 82%; opacity: 0.55; }
+        .botanical-right { width: clamp(96px, 15%, 200px); height: 74%; opacity: 0.55; }
         .botanical-left svg, .botanical-right svg { width: 100%; height: 100%; overflow: visible; }
         @keyframes botanicalSway {
-            0%, 100% { transform: rotate(-1.1deg); }
-            50% { transform: rotate(1.3deg); }
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3.4deg); }
         }
         .botanical-left  { transform-origin: 20% 100%; animation: botanicalSway 9s ease-in-out infinite; }
         .botanical-right { transform-origin: 85% 0%;  animation: botanicalSway 11s ease-in-out infinite reverse; }
@@ -782,6 +783,31 @@
         .flip-card-scene:hover .card-hint, .flip-card-scene:focus-visible .card-hint { opacity: 1; transform: none; }
         @media (hover: none) { .card-hint { display: none; } }
 
+        /* 字級：只作用在閱讀文字 */
+        .rs { font-size: calc(var(--rs) * var(--reading-scale, 1)) !important; }
+        .rs-card { --rs: 0.94rem; }
+        .rs-note { --rs: 0.875rem; }
+        .rs-dark { --rs: 1rem; }
+        .rs-body { --rs: 1.125rem; }
+        .rs-q { --rs: 1.25rem; }
+        .rs-opt { --rs: 1rem; }
+        .rs-hero { --rs: 1.125rem; }
+        @media (min-width: 640px) {
+            .rs-body { --rs: 1.25rem; }
+            .rs-q { --rs: 1.5rem; }
+            .rs-opt { --rs: 1.125rem; }
+            .rs-hero { --rs: 1.25rem; }
+        }
+        @media (min-width: 768px) { .rs-hero { --rs: 1.5rem; } }
+        .flip-card-back { overflow: hidden; }
+
+        /* 手機版導覽：鎖頭徽章縮成角標 */
+        @media (max-width: 640px) {
+            .nav-tab-item .course-no { font-size: 0.6rem; margin: 0 0 1px; }
+            .nav-lock-badge { position: absolute; top: 1px; right: 1px; padding: 1px 3px; border-width: 0; background: transparent !important; line-height: 1; }
+            .nav-lock-badge .badge-text { display: none; }
+        }
+
         /* 字級按鈕 */
         .font-scale-glyph { font-family: 'Cormorant Garamond', serif; font-weight: 600; letter-spacing: -0.02em; line-height: 1; color: var(--accent-metal); }
         .font-scale-dots { display: inline-flex; flex-direction: column-reverse; gap: 2px; }
@@ -1020,22 +1046,22 @@
                 </div>
 
                 <div class="relative flex items-center p-1 rounded-full border" style="background-color: rgba(8, 12, 18, 0.55); border-color: var(--border-dim);" role="group" aria-label="烹飪秘笈色調切換">
-                    <div id="grimoirePillSlider" class="sliding-pill-indicator absolute top-1 bottom-1 left-1 w-[72px] sm:w-[104px] rounded-full pointer-events-none" style="background-color: var(--accent-primary); box-shadow: 0 0 16px var(--glow-shadow);"></div>
+                    <div id="grimoirePillSlider" class="sliding-pill-indicator absolute top-1 bottom-1 left-1 w-[64px] sm:w-[104px] rounded-full pointer-events-none" style="background-color: var(--accent-primary); box-shadow: 0 0 16px var(--glow-shadow);"></div>
 
                     <!-- 1) 靜謐溺藍 (DEFAULT!) -->
-                    <button type="button" onclick="setGrimoireTheme('indigo', 0)" data-theme-btn="indigo" class="relative z-10 w-[72px] sm:w-[104px] py-1 text-[11px] sm:text-xs font-serif tracking-normal sm:tracking-wider flex items-center justify-center gap-1.5 text-white font-semibold transition-opacity">
+                    <button type="button" onclick="setGrimoireTheme('indigo', 0)" data-theme-btn="indigo" class="relative z-10 w-[64px] sm:w-[104px] py-1 text-[11px] sm:text-xs font-serif tracking-normal sm:tracking-wider flex items-center justify-center gap-1.5 text-white font-semibold transition-opacity">
                         <span class="w-2.5 h-2.5 rounded-full bg-[#243A52] border border-[#C4B8D8] shrink-0"></span>
                         <span>靜謐溺藍</span>
                     </button>
 
                     <!-- 2) 動脈餘溫 -->
-                    <button type="button" onclick="setGrimoireTheme('crimson', 1)" data-theme-btn="crimson" class="relative z-10 w-[72px] sm:w-[104px] py-1 text-[11px] sm:text-xs font-serif tracking-normal sm:tracking-wider flex items-center justify-center gap-1.5 opacity-75 hover:opacity-100 transition-opacity">
+                    <button type="button" onclick="setGrimoireTheme('crimson', 1)" data-theme-btn="crimson" class="relative z-10 w-[64px] sm:w-[104px] py-1 text-[11px] sm:text-xs font-serif tracking-normal sm:tracking-wider flex items-center justify-center gap-1.5 opacity-75 hover:opacity-100 transition-opacity">
                         <span class="w-2.5 h-2.5 rounded-full bg-[#9E1B24] border border-[#C5A059] shrink-0"></span>
                         <span>動脈餘溫</span>
                     </button>
 
                     <!-- 3) 黑巧炭燼 -->
-                    <button type="button" onclick="setGrimoireTheme('obsidian', 2)" data-theme-btn="obsidian" class="relative z-10 w-[72px] sm:w-[104px] py-1 text-[11px] sm:text-xs font-serif tracking-normal sm:tracking-wider flex items-center justify-center gap-1.5 opacity-75 hover:opacity-100 transition-opacity">
+                    <button type="button" onclick="setGrimoireTheme('obsidian', 2)" data-theme-btn="obsidian" class="relative z-10 w-[64px] sm:w-[104px] py-1 text-[11px] sm:text-xs font-serif tracking-normal sm:tracking-wider flex items-center justify-center gap-1.5 opacity-75 hover:opacity-100 transition-opacity">
                         <span class="w-2.5 h-2.5 rounded-full bg-[#0B0908] border border-[#B89758] shrink-0"></span>
                         <span>黑巧炭燼</span>
                     </button>
@@ -1043,46 +1069,46 @@
             </div>
 
             <!-- 右側：環境聲景開關 & 重播開場儀式 -->
-            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0 sm:mx-auto lg:mx-0">
-                <button type="button" id="fontScaleBtn" onclick="cycleFontScale()" aria-label="字級：標準（點擊切換）" title="字級：標準" class="font-scale-btn px-2.5 py-1 rounded-full border text-xs flex items-center gap-1 transition-all hover:scale-105" style="border-color: var(--border-dim); background-color: rgba(0,0,0,0.3); color: var(--text-sub);">
+            <div class="flex items-center gap-1 sm:gap-2 shrink-0 sm:mx-auto lg:mx-0">
+                <button type="button" id="fontScaleBtn" onclick="cycleFontScale()" aria-label="字級：標準（點擊切換）" title="字級：標準" class="font-scale-btn px-2 sm:px-2.5 py-1 rounded-full border text-xs flex items-center gap-1 transition-all hover:scale-105" style="border-color: var(--border-dim); background-color: rgba(0,0,0,0.3); color: var(--text-sub);">
                     <span class="font-scale-glyph" aria-hidden="true"><span style="font-size: 0.72em;">A</span><span style="font-size: 1.05em;">A</span></span>
                     <span class="font-scale-dots" aria-hidden="true"><i></i><i></i><i></i></span>
                 </button>
-                <button type="button" id="ambientAudioBtn" onclick="toggleAmbientSoundscape()" aria-label="燭火聲景開關" class="px-2.5 sm:px-3 py-1 rounded-full border text-xs font-serif tracking-wider flex items-center gap-1.5 transition-all hover:scale-105" style="border-color: var(--border-dim); background-color: rgba(0,0,0,0.3); color: var(--text-sub);">
+                <button type="button" id="ambientAudioBtn" onclick="toggleAmbientSoundscape()" aria-label="燭火聲景開關" class="px-2 sm:px-3 py-1 rounded-full border text-xs font-serif tracking-wider flex items-center gap-1.5 transition-all hover:scale-105" style="border-color: var(--border-dim); background-color: rgba(0,0,0,0.3); color: var(--text-sub);">
                     <span id="audioIndicatorDot" class="w-2 h-2 rounded-full bg-slate-400"></span>
                     <span class="sm:hidden" style="color: var(--accent-metal);"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.6c1.2 1.4 1.3 2.6 0 3.4-1.3-.8-1.2-2 0-3.4z"/><rect x="6.1" y="6.4" width="3.8" height="6.6" rx=".6"/><path d="M3.8 14.4h8.4"/></svg></span>
                     <span id="ambientAudioLabel" class="hidden sm:inline">燭火聲景：關閉</span>
                 </button>
 
-                <button type="button" onclick="replayOpeningCeremony()" aria-label="重播開場" class="hidden sm:inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 rounded-full border text-xs font-serif tracking-wider transition-all hover:scale-105" style="border-color: var(--border-dim); background-color: rgba(0,0,0,0.3); color: var(--accent-metal);">✦<span class="hidden sm:inline"> 重播開場</span></button>
+                <button type="button" onclick="replayOpeningCeremony()" aria-label="重播開場" class="inline-flex items-center gap-1 px-2 sm:px-3 py-1 rounded-full border text-xs font-serif tracking-wider transition-all hover:scale-105" style="border-color: var(--border-dim); background-color: rgba(0,0,0,0.3); color: var(--accent-metal);">✦<span class="hidden sm:inline"> 重播開場</span></button>
             </div>
         </div>
 
         <!-- 下層：5 大明確分頁小標導覽列 (完全對應頁面章節順序) -->
         <nav aria-label="生誕祭功能分頁導覽" class="max-w-7xl mx-auto px-3 sm:px-6 py-2 overflow-x-auto no-scrollbar">
-            <div id="sectionNavTrack" class="relative inline-flex sm:flex items-center justify-start sm:justify-center gap-1 sm:gap-2 min-w-max mx-auto p-1 rounded-full border" style="background-color: rgba(8, 12, 18, 0.44); border-color: var(--border-dim);">
-                <div id="navTabSlider" class="sliding-pill-indicator absolute top-1 bottom-1 left-1 rounded-full pointer-events-none" style="background-color: var(--accent-primary); box-shadow: 0 0 14px var(--glow-shadow);"></div>
+            <div id="sectionNavTrack" class="relative flex items-stretch sm:items-center justify-between sm:justify-center gap-0.5 sm:gap-2 w-full sm:w-auto sm:min-w-max mx-auto p-1 rounded-2xl sm:rounded-full border" style="background-color: rgba(8, 12, 18, 0.44); border-color: var(--border-dim);">
+                <div id="navTabSlider" class="sliding-pill-indicator absolute top-1 bottom-1 left-1 rounded-xl sm:rounded-full pointer-events-none" style="background-color: var(--accent-primary); box-shadow: 0 0 14px var(--glow-shadow);"></div>
 
-                <a href="#section-altar" onclick="activateNavTab('section-altar', this)" data-nav-target="section-altar" class="nav-tab-item relative z-10 px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-serif tracking-wider text-white font-semibold flex items-center gap-1.5 transition-colors">
+                <a href="#section-altar" onclick="activateNavTab('section-altar', this)" data-nav-target="section-altar" class="nav-tab-item relative z-10 flex-1 sm:flex-none px-1 sm:px-4 py-1.5 rounded-xl sm:rounded-full text-[11px] sm:text-xs font-serif tracking-normal sm:tracking-wider text-white font-semibold flex flex-col sm:flex-row items-center justify-center gap-0 sm:gap-1.5 leading-tight transition-colors">
                     <span class="course-no">I</span><span>餐桌陳列</span>
                 </a>
 
-                <a href="#section-quiz" onclick="activateNavTab('section-quiz', this)" data-nav-target="section-quiz" class="nav-tab-item relative z-10 px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-serif tracking-wider opacity-80 hover:opacity-100 flex items-center gap-1.5 transition-opacity">
+                <a href="#section-quiz" onclick="activateNavTab('section-quiz', this)" data-nav-target="section-quiz" class="nav-tab-item relative z-10 flex-1 sm:flex-none px-1 sm:px-4 py-1.5 rounded-xl sm:rounded-full text-[11px] sm:text-xs font-serif tracking-normal sm:tracking-wider opacity-80 hover:opacity-100 flex flex-col sm:flex-row items-center justify-center gap-0 sm:gap-1.5 leading-tight transition-opacity">
                     <span class="course-no">II</span><span>氣味診斷</span>
                 </a>
 
-                <a href="#section-submit" onclick="activateNavTab('section-submit', this)" data-nav-target="section-submit" class="nav-tab-item relative z-10 px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-serif tracking-wider opacity-80 hover:opacity-100 flex items-center gap-1.5 transition-opacity">
+                <a href="#section-submit" onclick="activateNavTab('section-submit', this)" data-nav-target="section-submit" class="nav-tab-item relative z-10 flex-1 sm:flex-none px-1 sm:px-4 py-1.5 rounded-xl sm:rounded-full text-[11px] sm:text-xs font-serif tracking-normal sm:tracking-wider opacity-80 hover:opacity-100 flex flex-col sm:flex-row items-center justify-center gap-0 sm:gap-1.5 leading-tight transition-opacity">
                     <span class="course-no">III</span><span>奉上標本</span>
-                    <span id="navSubmitLockBadge" class="px-2 py-0.5 rounded-full text-[10px] font-mono border" style="border-color: var(--border-bright); background-color: rgba(0,0,0,0.45); color: var(--accent-metal);">
-                        <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="7" width="9" height="7" rx="1.4"/><path d="M5.5 7V5.2a2.5 2.5 0 0 1 5 0V7"/><path d="M8 9.8v1.8"/></svg> 待鑑定
+                    <span id="navSubmitLockBadge" class="nav-lock-badge px-2 py-0.5 rounded-full text-[10px] font-mono border" style="border-color: var(--border-bright); background-color: rgba(0,0,0,0.45); color: var(--accent-metal);">
+                        <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="7" width="9" height="7" rx="1.4"/><path d="M5.5 7V5.2a2.5 2.5 0 0 1 5 0V7"/><path d="M8 9.8v1.8"/></svg><span class="badge-text"> 待鑑定</span>
                     </span>
                 </a>
 
-                <a href="#section-atlas" onclick="activateNavTab('section-atlas', this)" data-nav-target="section-atlas" class="nav-tab-item relative z-10 px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-serif tracking-wider opacity-80 hover:opacity-100 flex items-center gap-1.5 transition-opacity">
+                <a href="#section-atlas" onclick="activateNavTab('section-atlas', this)" data-nav-target="section-atlas" class="nav-tab-item relative z-10 flex-1 sm:flex-none px-1 sm:px-4 py-1.5 rounded-xl sm:rounded-full text-[11px] sm:text-xs font-serif tracking-normal sm:tracking-wider opacity-80 hover:opacity-100 flex flex-col sm:flex-row items-center justify-center gap-0 sm:gap-1.5 leading-tight transition-opacity">
                     <span class="course-no">IV</span><span>食譜閱覽</span>
                 </a>
 
-                <a href="#section-archive" onclick="activateNavTab('section-archive', this)" data-nav-target="section-archive" class="nav-tab-item relative z-10 px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-serif tracking-wider opacity-80 hover:opacity-100 flex items-center gap-1.5 transition-opacity">
+                <a href="#section-archive" onclick="activateNavTab('section-archive', this)" data-nav-target="section-archive" class="nav-tab-item relative z-10 flex-1 sm:flex-none px-1 sm:px-4 py-1.5 rounded-xl sm:rounded-full text-[11px] sm:text-xs font-serif tracking-normal sm:tracking-wider opacity-80 hover:opacity-100 flex flex-col sm:flex-row items-center justify-center gap-0 sm:gap-1.5 leading-tight transition-opacity">
                     <span class="course-no">V</span><span>館藏陳列</span>
                 </a>
             </div>
@@ -1151,7 +1177,7 @@
 
         <div class="ornate-line relative z-[2] w-64 sm:w-96 mx-auto my-5"></div>
 
-        <p class="relative z-[2] font-body text-lg sm:text-xl md:text-2xl max-w-2xl mx-auto leading-relaxed" style="color: var(--text-sub);">
+        <p class="relative z-[2] font-body text-lg sm:text-xl md:text-2xl max-w-2xl mx-auto leading-relaxed rs rs-hero" style="color: var(--text-sub);">
             「他不愛人，而是保存人。將你指尖顫抖的角度、緩慢腐敗的花瓣與 85% 的苦澀，悉數擺上今夜的銀盤。」
         </p>
     </div>
@@ -1176,13 +1202,13 @@
                 <span class="course-text"><span class="course-numeral">I</span><span class="course-name">開胃</span><span class="course-fr">Amuse-bouche</span></span>
                 <span class="course-rule"></span>
             </div>
+            <div class="stage-shell relative">
+            <!-- 毒草與夜香：放在面板外層，擺動時會越過面板框線 -->
+            <div class="botanical-frame absolute pointer-events-none" aria-hidden="true">
+                <div id="botanicalWormwood" class="botanical-sway botanical-left absolute left-0 bottom-0"></div>
+                <div id="botanicalTuberose" class="botanical-sway botanical-right absolute right-0 top-14"></div>
+            </div>
             <div class="frosted-panel arbor-stage-box rounded-3xl p-4 sm:p-8 relative overflow-hidden" data-tilt data-tilt-max="2.2">
-
-                <!-- 毒草與夜香：苦艾（左下升起）× 夜來香（右上垂落），以 JS 生成 -->
-                <div class="botanical-frame absolute inset-0 pointer-events-none z-0" aria-hidden="true">
-                    <div id="botanicalWormwood" class="botanical-sway botanical-left absolute left-0 bottom-0"></div>
-                    <div id="botanicalTuberose" class="botanical-sway botanical-right absolute right-0 top-14"></div>
-                </div>
 
                 <!-- 切片分頁控制列 -->
                 <div class="relative z-10 flex flex-wrap items-center justify-between gap-3 pb-4 mb-2 border-b" style="border-color: var(--border-dim);">
@@ -1410,6 +1436,7 @@
                     </a>
                 </div>
             </div>
+            </div>
 
             <!-- 晚宴燭光：全站共鳴計數器 -->
             <div>
@@ -1526,7 +1553,7 @@
 
                         <div class="p-5 rounded-xl mb-6" style="background-color: rgba(0,0,0,0.28);">
                             <span class="font-mono text-[10px] tracking-widest uppercase opacity-75 block mb-1.5">美食家冷靜評語</span>
-                            <p id="certConsultantQuote" class="font-body italic text-lg sm:text-xl leading-relaxed"></p>
+                            <p id="certConsultantQuote" class="font-body italic text-lg sm:text-xl leading-relaxed rs rs-body"></p>
                         </div>
 
                         <div class="flex flex-wrap items-center justify-center gap-3">
@@ -1742,14 +1769,14 @@
                                     <div id="bookVesselIcon" class="w-9 h-11"></div>
                                 </div>
 
-                                <blockquote id="bookBlessingText" class="font-body italic text-lg sm:text-xl leading-relaxed mb-6"></blockquote>
+                                <blockquote id="bookBlessingText" class="font-body italic text-lg sm:text-xl leading-relaxed mb-6 rs rs-body"></blockquote>
                             </div>
 
                             <div class="p-4 rounded-xl" style="background-color: rgba(0,0,0,0.34);">
                                 <span class="font-mono text-[10px] tracking-widest uppercase block mb-1" style="color: var(--accent-metal);">
                                     美食家品鑑批註
                                 </span>
-                                <p id="bookConsultantCritique" class="font-serif text-sm leading-relaxed opacity-90"></p>
+                                <p id="bookConsultantCritique" class="font-serif text-sm leading-relaxed opacity-90 rs rs-note"></p>
                             </div>
                             <button type="button" onclick="findSpecimenInArchive()" class="self-end mt-4 text-xs font-serif tracking-wider underline underline-offset-4 decoration-dotted opacity-75 hover:opacity-100 transition-opacity" style="color: var(--accent-metal);">
                                 在館藏中找到這一枚
@@ -1796,7 +1823,7 @@
                         <div class="p-5 rounded-2xl border border-amber-200/20 bg-white/[0.02]">
                             <span class="font-mono text-[10px] tracking-widest text-amber-300/70">RECIPE NO. 01 · 生誕夜特調</span>
                             <h4 class="font-serif text-lg font-bold mt-1 mb-2 text-amber-200">《冷萃苦艾與未乾淚腺》</h4>
-                            <p class="font-body italic text-base leading-relaxed">
+                            <p class="font-body italic text-base leading-relaxed rs rs-dark">
                                 「取 85% 厄瓜多黑可可碎片慢火融化，佐以受試者說謊時無名指顫抖的 0.3 秒停頓。切記不可攪拌過度——唯有保留裂痕，入口才會有令人戰慄的層次。」
                             </p>
                         </div>
@@ -1804,7 +1831,7 @@
                         <div class="p-5 rounded-2xl border border-amber-200/20 bg-white/[0.02]">
                             <span class="font-mono text-[10px] tracking-widest text-amber-300/70">PRIVATE LOG · 00:00 獨白</span>
                             <h4 class="font-serif text-lg font-bold mt-1 mb-2 text-amber-200">《關於那些獻上祝福的人》</h4>
-                            <p class="font-body italic text-base leading-relaxed">
+                            <p class="font-body italic text-base leading-relaxed rs rs-dark">
                                 「他們以為自己在為我慶生，卻不知每一句虔誠的祝禱，都已精準落入我的玻璃載玻片中。多麼可愛又失衡的姿態……今夜，我會將你們全部妥善保存。」
                             </p>
                         </div>
@@ -1812,7 +1839,7 @@
                         <div class="p-5 rounded-2xl border border-amber-200/20 bg-white/[0.02]">
                             <span class="font-mono text-[10px] tracking-widest text-amber-300/70">ANATOMY NOTE · 鑑賞守則</span>
                             <h4 class="font-serif text-lg font-bold mt-1 mb-2 text-amber-200">《致迷途的品鑑客》</h4>
-                            <p class="font-body italic text-base leading-relaxed">
+                            <p class="font-body italic text-base leading-relaxed rs rs-dark">
                                 「完整無瑕的瓷器只配擺在櫥窗積灰；唯有被敲出第一道裂紋的靈魂，才會滲出最甘美的蜜汁。別急著逃跑，我們的晚宴才剛上第一道前菜。」
                             </p>
                         </div>
@@ -1822,7 +1849,7 @@
                         <div class="p-5 rounded-2xl border border-amber-300/60 bg-amber-950/25 shadow-[0_0_25px_rgba(255,215,130,0.18)]">
                             <span class="font-mono text-[10px] tracking-widest text-amber-300">RECIPE NO. 01 · 生誕夜特調</span>
                             <h4 class="font-serif text-lg font-bold mt-1 mb-2 text-amber-200">《冷萃苦艾與未乾淚腺》</h4>
-                            <p class="font-body italic text-base leading-relaxed">
+                            <p class="font-body italic text-base leading-relaxed rs rs-dark">
                                 「取 85% 厄瓜多黑可可碎片慢火融化，佐以受試者說謊時無名指顫抖的 0.3 秒停頓。切記不可攪拌過度——唯有保留裂痕，入口才會有令人戰慄的層次。」
                             </p>
                         </div>
@@ -1830,7 +1857,7 @@
                         <div class="p-5 rounded-2xl border border-amber-300/60 bg-amber-950/25 shadow-[0_0_25px_rgba(255,215,130,0.18)]">
                             <span class="font-mono text-[10px] tracking-widest text-amber-300">PRIVATE LOG · 00:00 獨白</span>
                             <h4 class="font-serif text-lg font-bold mt-1 mb-2 text-amber-200">《關於那些獻上祝福的人》</h4>
-                            <p class="font-body italic text-base leading-relaxed">
+                            <p class="font-body italic text-base leading-relaxed rs rs-dark">
                                 「他們以為自己在為我慶生，卻不知每一句虔誠的祝禱，都已精準落入我的玻璃載玻片中。多麼可愛又失衡的姿態……今夜，我會將你們全部妥善保存。」
                             </p>
                         </div>
@@ -1838,7 +1865,7 @@
                         <div class="p-5 rounded-2xl border border-amber-300/60 bg-amber-950/25 shadow-[0_0_25px_rgba(255,215,130,0.18)]">
                             <span class="font-mono text-[10px] tracking-widest text-amber-300">ANATOMY NOTE · 鑑賞守則</span>
                             <h4 class="font-serif text-lg font-bold mt-1 mb-2 text-amber-200">《致迷途的品鑑客》</h4>
-                            <p class="font-body italic text-base leading-relaxed">
+                            <p class="font-body italic text-base leading-relaxed rs rs-dark">
                                 「完整無瑕的瓷器只配擺在櫥窗積灰；唯有被敲出第一道裂紋的靈魂，才會滲出最甘美的蜜汁。別急著逃跑，我們的晚宴才剛上第一道前菜。」
                             </p>
                         </div>
@@ -1948,12 +1975,12 @@
             </div>
 
             <div class="relative z-10 my-4 p-5 rounded-xl" style="background-color: rgba(0,0,0,0.34);">
-                <p id="inspectConfessionText" class="font-body text-lg sm:text-xl leading-relaxed italic whitespace-pre-line"></p>
+                <p id="inspectConfessionText" class="font-body text-lg sm:text-xl leading-relaxed italic whitespace-pre-line rs rs-body"></p>
             </div>
 
             <div class="relative z-10 mb-5 p-4 rounded-xl" style="background-color: rgba(0,0,0,0.24);">
                 <span class="font-mono text-[10px] tracking-widest uppercase block mb-1" style="color: var(--accent-metal);">美食家品鑑批註</span>
-                <p id="inspectCritiqueText" class="font-serif text-sm leading-relaxed opacity-90"></p>
+                <p id="inspectCritiqueText" class="font-serif text-sm leading-relaxed opacity-90 rs rs-note"></p>
             </div>
 
             <div class="relative z-10 pt-4 flex flex-wrap items-center justify-between gap-3" >
@@ -3215,13 +3242,13 @@
                     <span class="font-mono text-xs tracking-widest uppercase block mb-2" style="color: var(--accent-metal);">
                         QUESTION 0${quizStepIndex + 1} / 0${QUIZ_QUESTIONS.length}
                     </span>
-                    <h3 class="font-serif text-xl sm:text-2xl font-semibold leading-snug mb-5">
+                    <h3 class="font-serif text-xl sm:text-2xl font-semibold leading-snug mb-5 rs rs-q">
                         ${escapeHTML(currentQ.q)}
                     </h3>
                     <div class="space-y-3">
                         ${currentQ.options.map((opt, i) => `
                             <button type="button" onclick="answerQuizQuestion('${opt.cat}')" class="w-full text-left p-4 rounded-xl border transition-all hover:translate-x-1.5 flex items-center justify-between gap-3 group" style="background-color: var(--card-glass); border-color: var(--border-dim);">
-                                <span class="font-body text-base sm:text-lg leading-snug">${escapeHTML(opt.text)}</span>
+                                <span class="font-body text-base sm:text-lg leading-snug rs rs-opt">${escapeHTML(opt.text)}</span>
                                 <span class="font-mono text-xs opacity-55 group-hover:opacity-100 shrink-0" style="color: var(--accent-metal);">0${i + 1} ➔</span>
                             </button>
                         `).join('')}
@@ -3297,7 +3324,7 @@
             // 更新頂部導覽列「奉上標本」徽章：待鑑定 -> 已解封
             const lockBadge = document.getElementById('navSubmitLockBadge');
             if (lockBadge) {
-                lockBadge.textContent = '✦ 已解封';
+                lockBadge.innerHTML = '✦<span class="badge-text"> 已解封</span>';
                 lockBadge.style.backgroundColor = 'var(--accent-primary)';
                 lockBadge.style.color = '#FFFFFF';
             }
@@ -3624,7 +3651,7 @@
                                     <span class="inline-flex items-center gap-1.5" style="color: var(--accent-metal);">${escapeHTML(spec.id)}${sigil}</span>
                                     <span class="opacity-70 inline-flex items-center gap-1">${UI_ICONS.pulse} ${spec.resonances || 0}</span>
                                 </div>
-                                <p class="font-body text-[0.94rem] leading-[1.9] italic line-clamp-4 mb-5" style="color: var(--text-main);">
+                                <p class="font-body text-[0.94rem] leading-[1.9] italic line-clamp-4 mb-5 rs rs-card" style="color: var(--text-main);">
                                     「${escapeHTML(spec.message)}」
                                 </p>
                             </div>
@@ -3651,7 +3678,7 @@
                                     風味分析：${escapeHTML(flavorTag)}
                                 </div>
 
-                                <p class="card-well font-body italic text-[0.94rem] leading-[1.9] p-4 rounded-xl">
+                                <p class="card-well font-body italic text-[0.94rem] leading-[1.9] p-4 rounded-xl rs rs-card line-clamp-6">
                                     「${escapeHTML(critiqueText)}」
                                 </p>
                             </div>
@@ -4355,7 +4382,7 @@
                         <path d="${leaves.join(' ')}" fill="var(--arbor-stroke)" fill-opacity="0.16" stroke-width="0.7" stroke-opacity="0.7" />
                     </g>
                     <g fill="var(--accent-metal)" fill-opacity="0.7" stroke="var(--arbor-stroke)" stroke-width="0.5">${heads.join('')}</g>
-                    <text x="14" y="626" fill="var(--arbor-stroke)" fill-opacity="0.55" font-family="Cormorant Garamond, serif" font-size="8.5" letter-spacing="2.6">ARTEMISIA · 苦艾</text>
+                    <text x="14" y="626" fill="var(--arbor-stroke)" fill-opacity="0.55" font-family="Cormorant Garamond, serif" font-size="8.5" letter-spacing="2.6">ARTEMISIA ABSINTHIUM</text>
                 </svg>`;
         }
 
@@ -4432,7 +4459,7 @@
                         ${leafShapes.join('')}
                         <g filter="url(#nightBloomGlow)">${clusters.join('')}</g>
                     </g>
-                    <text x="216" y="592" text-anchor="end" fill="var(--arbor-stroke)" fill-opacity="0.55" font-family="Cormorant Garamond, serif" font-size="8.5" letter-spacing="2.6">TELOSMA · 夜來香</text>
+                    <text x="216" y="592" text-anchor="end" fill="var(--arbor-stroke)" fill-opacity="0.55" font-family="Cormorant Garamond, serif" font-size="8.5" letter-spacing="2.6">TELOSMA CORDATA</text>
                 </svg>`;
         }
 
@@ -5309,12 +5336,12 @@
         }
 
         /* --------------------------------------------------------------------------
-           17k. 字級調整：小／標準／大 三段，記住訪客的選擇（以根字級縮放所有 rem 文字）
+           17k. 字級調整：小／標準／大 三段，記住訪客的選擇（只縮放閱讀文字，版面固定）
            -------------------------------------------------------------------------- */
         const FONT_SCALES = [
-            { key: 'small', label: '小', size: '93.75%' },
-            { key: 'normal', label: '標準', size: '100%' },
-            { key: 'large', label: '大', size: '112.5%' }
+            { key: 'small', label: '小', scale: 0.9 },
+            { key: 'normal', label: '標準', scale: 1 },
+            { key: 'large', label: '大', scale: 1.15 }
         ];
         const FONT_SCALE_KEY = 'specimens_font_scale_v1';
         let fontScaleIndex = 1;
@@ -5322,7 +5349,9 @@
         function applyFontScale(index, { persist = true } = {}) {
             fontScaleIndex = (index + FONT_SCALES.length) % FONT_SCALES.length;
             const scale = FONT_SCALES[fontScaleIndex];
-            document.documentElement.style.fontSize = scale.size;
+            // 只縮放閱讀文字（.rs），版面、按鈕與標籤維持固定
+            document.documentElement.style.removeProperty('font-size');
+            document.documentElement.style.setProperty('--reading-scale', String(scale.scale));
             const btn = document.getElementById('fontScaleBtn');
             if (btn) {
                 btn.setAttribute('aria-label', `字級：${scale.label}（點擊切換）`);
@@ -5332,8 +5361,6 @@
             if (persist) {
                 try { localStorage.setItem(FONT_SCALE_KEY, scale.key); } catch (e) {}
             }
-            // 字寬改變後重新對齊各個滑塊與視差圖層
-            requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
         }
 
         function cycleFontScale() {
