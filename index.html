@@ -8,7 +8,7 @@
     <!-- Google Fonts: 導入高解析明體與古典襯線字體作為平成明體的優雅後備 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Noto+Serif+TC:wght@400;600;700&family=Shippori+Mincho:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Serif+TC:wght@400;600;700&family=Shippori+Mincho:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -31,9 +31,9 @@
     <style>
         /* ==========================================================================
            1. 「烹飪秘笈」全站色調系統 (Culinary Grimoire Themes)
-              1) 靜謐溺藍 (DEFAULT! #243A52 / #152232 / #887BB0)
-              2) 動脈餘溫 (#1C0507 / #2D090D / #C5A059 & #9E1B24)
-              3) 黑巧炭燼 (#0B0908 / #161210 / #B89758 & #EAE4D3)
+              1) 藍調時分 (DEFAULT! #243A52 / #152232 / #887BB0)
+              2) 燭火正酣 (#1C0507 / #2D090D / #C5A059 & #9E1B24)
+              3) 午夜殘席 (#0B0908 / #161210 / #B89758 & #EAE4D3)
            ========================================================================== */
         :root,
         [data-theme="indigo"] {
@@ -131,6 +131,19 @@
         @supports (overflow-x: clip) {
             html, body { overflow-x: clip; }
         }
+
+        /* 行距與字距：中文內文放鬆，避免擁擠 */
+        body { line-height: 1.85; }
+        p, blockquote, li, label { letter-spacing: 0.03em; }
+        .leading-relaxed { line-height: 1.95 !important; }
+        .leading-snug { line-height: 1.7 !important; }
+        .leading-\[1\.9\] { line-height: 2 !important; }
+        h1, h2, h3, h4 { line-height: 1.45; }
+        .heisei-title { line-height: 1.35; }
+        .nav-tab-item, .leading-tight { line-height: 1.35 !important; }
+        .rm-text { line-height: 2.05; }
+        .rm-note { line-height: 1.95; }
+        .rm-ingredients li { line-height: 2.15; }
 
         /* 中文字體沒有真斜體：全站取消 italic，改以字距與色階區分語氣 */
         .italic, em, i { font-style: normal !important; letter-spacing: 0.03em; }
@@ -847,6 +860,45 @@
         }
         .rm-curl:active, .rm-curl:hover { width: 52px; height: 52px; }
 
+        /* ===== 觸控裝置的補償效果 ===== */
+        /* 主舞台在畫面中時自動「活起來」：掛飾搖擺、根脈光點、植物擺動、夜來香發光 */
+        .stage-shell.stage-live .ornament-pendulum,
+        .stage-shell.stage-live .vein-flow-pulse,
+        .stage-shell.stage-live .botanical-left,
+        .stage-shell.stage-live .botanical-right,
+        .stage-shell.stage-live .night-bloom,
+        .stage-shell.stage-live .stage-sprig-m { animation-play-state: running; }
+        .stage-shell.stage-live .vein-pulse-group { opacity: 1; }
+        .stage-shell.stage-live .ghost-dinnerware { opacity: 0.45; }
+
+        /* 畫面正中央的卡片「對焦」：解除防腐、顯出原色 */
+        .flip-card-scene.is-focused .formaldehyde-filter { filter: grayscale(0%) sepia(0%) brightness(1) contrast(1.03); transform: scale(1.03); }
+        .flip-card-scene.is-focused .theme-tint { opacity: 0; }
+        .flip-card-scene.is-focused .flip-card-face { border-color: var(--border-bright); }
+
+        /* 手機版主舞台上下角的小植物 */
+        .stage-sprig-m { display: none; }
+        @media (max-width: 640px) {
+            .stage-sprig-m {
+                display: block;
+                position: absolute;
+                z-index: 20;
+                pointer-events: none;
+                color: var(--arbor-stroke);
+                opacity: 0.6;
+                width: 44px;
+                height: 78px;
+                animation: botanicalSway 8s ease-in-out infinite paused;
+            }
+            .stage-sprig-m svg { width: 100%; height: 100%; overflow: visible; }
+            .stage-sprig-top { top: -34px; left: 14px; transform-origin: 50% 100%; rotate: -24deg; }
+            .stage-sprig-bottom { bottom: -44px; right: 18px; transform-origin: 50% 50%; rotate: 164deg; }
+        }
+
+        /* 點擊時閃現的線條小餐刀 */
+        .tap-knife { position: absolute; width: 26px; height: 26px; margin: -22px 0 0 -4px; pointer-events: none; color: #F2F5FA; filter: drop-shadow(0 0 6px var(--glow-shadow)); }
+        .tap-knife svg { width: 100%; height: 100%; overflow: visible; }
+
         /* 字級：只作用在閱讀文字 */
         .rs { font-size: calc(var(--rs) * var(--reading-scale, 1)) !important; }
         .rs-card { --rs: 0.94rem; }
@@ -953,8 +1005,10 @@
             position: absolute;
             font-family: 'Cormorant Garamond', 'Shippori Mincho', serif;
             font-size: clamp(84px, 13vw, 210px);
-            font-weight: 600;
-            letter-spacing: 0.16em;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            line-height: 1;
+            transform-origin: 0 50%;
             white-space: nowrap;
             color: transparent;
             -webkit-text-stroke: 1px var(--arbor-stroke);
@@ -1002,7 +1056,7 @@
 
         <!-- 右上角略過儀式按鈕 -->
         <button type="button" onclick="skipOpeningCeremony()" class="absolute top-5 right-5 z-30 px-4 py-1.5 rounded-full border border-white/25 bg-black/50 backdrop-blur-md font-mono text-xs tracking-widest text-slate-200 hover:border-white hover:text-white transition-all">
-            SKIP 略過儀式 &gt;&gt;
+            直接入席
         </button>
 
         <!-- 中央儀式舞台 -->
@@ -1094,7 +1148,7 @@
     <!-- ==========================================================================
          頂部雙層導覽列：
          上層：「烹飪秘笈」三種經典色調切換器（藍紫色 / 血紅色 / 黑色）+ 燭火聲景 + 重播開場
-         下層：5 大明確分頁小標（餐桌陳列 / 氣味診斷 / 奉上標本 / 食譜閱覽 / 館藏陳列）
+         下層：5 大明確分頁小標（餐桌陳列 / 氣味診斷 / 獻上標本 / 食譜閱覽 / 館藏陳列）
          ========================================================================== -->
     <header class="sticky top-0 z-40 w-full backdrop-blur-md border-b transition-colors duration-700" style="background-color: var(--card-glass-deep); border-color: var(--border-dim);">
         <!-- 上層工具列 -->
@@ -1104,30 +1158,28 @@
             <div class="flex items-center gap-2 sm:gap-3 sm:mx-auto lg:mx-0">
                 <div class="hidden sm:flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full" style="background-color: var(--accent-glow);"></span>
-                    <span class="font-serif text-xs sm:text-sm tracking-[0.16em] font-semibold" style="color: var(--accent-metal);">
-                        烹飪秘笈
-                    </span>
+                    <span class="font-serif text-xs sm:text-sm tracking-[0.16em] font-semibold" style="color: var(--accent-metal);">今夜燈色</span>
                 </div>
 
-                <div class="relative flex items-center p-1 rounded-full border" style="background-color: rgba(8, 12, 18, 0.55); border-color: var(--border-dim);" role="group" aria-label="烹飪秘笈色調切換">
+                <div class="relative flex items-center p-1 rounded-full border" style="background-color: rgba(8, 12, 18, 0.55); border-color: var(--border-dim);" role="group" aria-label="今夜燈色切換">
                     <div id="grimoirePillSlider" class="sliding-pill-indicator absolute top-1 bottom-1 left-1 w-[64px] sm:w-[104px] rounded-full pointer-events-none" style="background-color: var(--accent-primary); box-shadow: 0 0 16px var(--glow-shadow);"></div>
 
-                    <!-- 1) 靜謐溺藍 (DEFAULT!) -->
+                    <!-- 1) 藍調時分 (DEFAULT!) -->
                     <button type="button" onclick="setGrimoireTheme('indigo', 0)" data-theme-btn="indigo" class="relative z-10 w-[64px] sm:w-[104px] py-1 text-[11px] sm:text-xs font-serif tracking-normal sm:tracking-wider flex items-center justify-center gap-1.5 text-white font-semibold transition-opacity">
                         <span class="w-2.5 h-2.5 rounded-full bg-[#243A52] border border-[#C4B8D8] shrink-0"></span>
-                        <span>靜謐溺藍</span>
+                        <span>藍調時分</span>
                     </button>
 
-                    <!-- 2) 動脈餘溫 -->
+                    <!-- 2) 燭火正酣 -->
                     <button type="button" onclick="setGrimoireTheme('crimson', 1)" data-theme-btn="crimson" class="relative z-10 w-[64px] sm:w-[104px] py-1 text-[11px] sm:text-xs font-serif tracking-normal sm:tracking-wider flex items-center justify-center gap-1.5 opacity-75 hover:opacity-100 transition-opacity">
                         <span class="w-2.5 h-2.5 rounded-full bg-[#9E1B24] border border-[#C5A059] shrink-0"></span>
-                        <span>動脈餘溫</span>
+                        <span>燭火正酣</span>
                     </button>
 
-                    <!-- 3) 黑巧炭燼 -->
+                    <!-- 3) 午夜殘席 -->
                     <button type="button" onclick="setGrimoireTheme('obsidian', 2)" data-theme-btn="obsidian" class="relative z-10 w-[64px] sm:w-[104px] py-1 text-[11px] sm:text-xs font-serif tracking-normal sm:tracking-wider flex items-center justify-center gap-1.5 opacity-75 hover:opacity-100 transition-opacity">
                         <span class="w-2.5 h-2.5 rounded-full bg-[#0B0908] border border-[#B89758] shrink-0"></span>
-                        <span>黑巧炭燼</span>
+                        <span>午夜殘席</span>
                     </button>
                 </div>
             </div>
@@ -1162,7 +1214,7 @@
                 </a>
 
                 <a href="#section-submit" onclick="activateNavTab('section-submit', this)" data-nav-target="section-submit" class="nav-tab-item relative z-10 flex-1 sm:flex-none px-1 sm:px-4 py-1.5 rounded-xl sm:rounded-full text-[11px] sm:text-xs font-serif tracking-normal sm:tracking-wider opacity-80 hover:opacity-100 flex flex-col sm:flex-row items-center justify-center gap-0 sm:gap-1.5 leading-tight transition-opacity">
-                    <span class="course-no">III</span><span>奉上標本</span>
+                    <span class="course-no">III</span><span>獻上標本</span>
                     <span id="navSubmitLockBadge" class="nav-lock-badge px-2 py-0.5 rounded-full text-[10px] font-mono border" style="border-color: var(--border-bright); background-color: rgba(0,0,0,0.45); color: var(--accent-metal);">
                         <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="7" width="9" height="7" rx="1.4"/><path d="M5.5 7V5.2a2.5 2.5 0 0 1 5 0V7"/><path d="M8 9.8v1.8"/></svg><span class="badge-text"> 待鑑定</span>
                     </span>
@@ -1236,7 +1288,7 @@
 
         <!-- 鐘罩下的標本銘牌 -->
         <p class="hero-plaque font-display text-[9px] sm:text-xs tracking-[0.12em] sm:tracking-[0.42em] px-1 uppercase mt-4 opacity-85" style="color: var(--accent-metal);">
-            Emotional &amp; Taste Anatomy Gourmet · Birthday Banquet
+            The Gourmet&rsquo;s Birthday Supper
         </p>
 
         <div class="ornate-line relative z-[2] w-64 sm:w-96 mx-auto my-5"></div>
@@ -1250,7 +1302,7 @@
          主內容流 (五大核心分區 — 依序排列)
          1. #section-altar   餐桌陳列
          2. #section-quiz    感官氣味診斷書 (前置必修鑑定)
-         3. #section-submit  奉上您的情緒切片 (鑑定後解封 + 下拉式選單)
+         3. #section-submit  獻上你的情緒切片 (鑑定後解封 + 下拉式選單)
          4. #section-archive 館藏陳列 (統計 + 雙面玻璃翻轉卡 + 暗房探照燈)
          5. #section-atlas   食譜閱覽 (3D 翻頁典籍)
          ========================================================================== -->
@@ -1272,6 +1324,9 @@
                 <div id="botanicalWormwood" class="botanical-sway botanical-left absolute left-0 bottom-0"></div>
                 <div id="botanicalTuberose" class="botanical-sway botanical-right absolute right-0 top-14"></div>
             </div>
+            <!-- 手機版：兩枝小植物改放在主舞台上下角，越過框線 -->
+            <div class="stage-sprig-m stage-sprig-top" id="stageSprigTop" aria-hidden="true"></div>
+            <div class="stage-sprig-m stage-sprig-bottom" id="stageSprigBottom" aria-hidden="true"></div>
             <div class="frosted-panel arbor-stage-box rounded-3xl p-4 sm:p-8 relative overflow-hidden" data-tilt data-tilt-max="2.2">
 
                 <!-- 切片分頁控制列 -->
@@ -1492,11 +1547,11 @@
                 <!-- 祭壇底部引導列 -->
                 <div class="relative z-10 mt-2 pt-4 flex flex-col sm:flex-row items-center justify-between gap-4" >
                     <p class="text-xs sm:text-sm italic text-center sm:text-left" style="color: var(--text-sub);">
-                        點選根脈上的標本掛飾，開啟全息解剖視窗。
+                        選一枚放上料理台。
                     </p>
 
                     <a href="#section-quiz" onclick="activateNavTab('section-quiz')" class="baroque-cta-btn px-7 py-2.5 rounded-full text-sm font-serif tracking-[0.16em] text-white font-semibold flex items-center gap-2 shrink-0">
-                        <span>✦ 前往進行氣味診斷</span>
+                        <span>✦ 氣味蒐集</span>
                     </a>
                 </div>
             </div>
@@ -1507,11 +1562,11 @@
                 <div class="frosted-panel rounded-3xl p-6 sm:p-7 grid grid-cols-1 md:grid-cols-2 gap-6 items-center relative overflow-hidden">
                     <div>
                         <div class="flex items-center justify-between border-b pb-3 mb-4" style="border-color: var(--border-dim);">
-                            <span class="font-serif text-xs opacity-80">點擊或長按燭火滴蠟</span>
+                            <span class="font-serif text-xs opacity-80">按住燭火，但小心別燙傷。</span>
                         </div>
                         <h3 class="heisei-title text-2xl font-bold mb-1">晚宴燭光</h3>
                         <p class="text-xs sm:text-sm italic mb-4" style="color: var(--text-sub);">
-                            「蠟淚緩慢流淌的每分每秒，都是獻給壽星最優雅的供養。」
+                            「蠟淚流得越慢，香氣就逼得越深。」
                         </p>
                     </div>
 
@@ -1556,7 +1611,7 @@
         <!-- ========================================================================
              分區 2：感官氣味診斷書 (#section-quiz — 前置必修！完成後方可解封獻禮表單)
              ======================================================================== -->
-        <section id="section-quiz" aria-label="感官氣味診斷書" class="scroll-mt-32">
+        <section id="section-quiz" aria-label="氣味標籤" class="scroll-mt-32">
             <!-- 上菜順序 II：前菜 -->
             <div class="course-marker" aria-hidden="true">
                 <span class="course-rule"></span>
@@ -1566,10 +1621,10 @@
             <div class="frosted-panel rounded-3xl p-6 sm:p-10">
                 <div class="text-center max-w-2xl mx-auto mb-8">
                     <h2 class="heisei-title text-3xl sm:text-4xl font-bold mb-2">
-                        感官氣味診斷書
+                        氣味標籤
                     </h2>
                     <p class="text-sm sm:text-base italic" style="color: var(--text-sub);">
-                        回答四道感官試探，鑑定完成後會解封下方的獻禮席位。
+                        留下氣味，持續醞釀。
                     </p>
                 </div>
 
@@ -1595,7 +1650,7 @@
                         <div class="flex flex-wrap items-center justify-between gap-3 border-b pb-4 mb-5" style="border-color: var(--border-dim);">
                             <div>
                                 <span class="font-mono text-[10px] tracking-[0.3em] uppercase block" style="color: var(--accent-metal);">VERIFIED SENSORY DIAGNOSIS CERTIFICATE</span>
-                                <h3 class="heisei-title text-2xl sm:text-3xl font-bold mt-0.5">感官氣味診斷書</h3>
+                                <h3 class="heisei-title text-2xl sm:text-3xl font-bold mt-0.5">氣味標籤</h3>
                             </div>
                             <div id="certVesselSvg" class="w-12 h-14"></div>
                         </div>
@@ -1622,15 +1677,15 @@
 
                         <div class="flex flex-wrap items-center justify-center gap-3">
                             <button type="button" id="diagnosisImageBtn" onclick="generateDiagnosisImage()" class="px-5 py-2.5 rounded-full border text-xs sm:text-sm font-serif tracking-wider transition-all hover:scale-105" style="border-color: var(--border-bright); background-color: rgba(0,0,0,0.42); color: var(--accent-metal);">
-                                ⧉ 保存診斷結果圖片
+                                ⧉ 撕下標籤
                             </button>
 
                             <a href="#section-submit" onclick="activateNavTab('section-submit')" class="baroque-cta-btn px-6 py-2.5 rounded-full text-xs sm:text-sm font-serif tracking-wider text-white font-semibold">
-                                ↓ 前往解封席位奉上祝福
+                                ↓ 去獻上切片
                             </a>
 
                             <button type="button" onclick="resetDiagnosisQuiz()" class="px-4 py-2.5 rounded-full border text-xs font-serif opacity-75 hover:opacity-100 transition-opacity" style="border-color: var(--border-dim);">
-                                ↻ 重新診斷
+                                ↻ 再聞一次
                             </button>
                         </div>
                     </div>
@@ -1639,9 +1694,9 @@
         </section>
 
         <!-- ========================================================================
-             分區 3：奉上您的情緒切片 (#section-submit — 鑑定解封門禁 + 下拉式表單)
+             分區 3：獻上你的情緒切片 (#section-submit — 鑑定解封門禁 + 下拉式表單)
              ======================================================================== -->
-        <section id="section-submit" aria-label="奉上您的情緒切片" class="scroll-mt-32 space-y-8">
+        <section id="section-submit" aria-label="獻上你的情緒切片" class="scroll-mt-32 space-y-8">
             <!-- 上菜順序 III：主菜 -->
             <div class="course-marker" aria-hidden="true">
                 <span class="course-rule"></span>
@@ -1660,18 +1715,18 @@
                         </div>
 
                         <h3 class="heisei-title text-xl sm:text-2xl font-bold mb-3" style="-webkit-text-fill-color: #F3EAE2;">
-                            封印中：尚未通過味覺與情緒成分鑑定
+                            尚未錄入氣味，快去吧。
                         </h3>
 
                         <p class="font-body italic text-base sm:text-lg leading-relaxed mb-7 text-amber-100/85">
-                            「美食家只收藏經過成分標定的靈魂。請先完成上方『感官氣味診斷書』，方能解封獻禮席位並送出祝福。」
+                            「美食家只收藏經過成分標定的靈魂。請先完成上方『氣味標籤』，方能解封獻禮席位並送出祝福。」
                         </p>
 
                         <a href="#section-quiz" onclick="activateNavTab('section-quiz')" class="inline-flex items-center gap-2 px-7 py-3 rounded-full font-serif text-sm sm:text-base tracking-[0.16em] text-white font-semibold border transition-transform hover:scale-105" style="background: linear-gradient(135deg, #9E1B24 0%, #4A070C 100%); border-color: #C5A059; box-shadow: 0 0 26px rgba(158, 27, 36, 0.55);">
                             <span>↑ 前往進行氣味診斷</span>
                         </a>
                         <button type="button" onclick="skipDiagnosisAndUnlock()" class="block mx-auto mt-5 text-xs font-serif tracking-wider underline underline-offset-4 decoration-dotted text-amber-100/55 hover:text-amber-100 transition-colors">
-                            不做鑑定，直接奉上
+                            不做鑑定，直接獻上
                         </button>
                     </div>
                 </div>
@@ -1679,15 +1734,15 @@
                 <!-- 標題列與解封後的認證徽章 -->
                 <div class="text-center max-w-2xl mx-auto mb-8">
                     <h2 class="heisei-title text-3xl sm:text-4xl font-bold mb-2">
-                        奉上您的情緒切片
+                        獻上你的情緒切片
                     </h2>
                     <p class="text-sm sm:text-base italic" style="color: var(--text-sub);">
-                        寫下給他的生日祝詞，封蠟後會懸掛在餐桌陳列的根脈上。
+                        寫下祝詞。封蠟之後將掛上根脈，任由品嚐。
                     </p>
 
                     <!-- 解封後顯示的認證徽章 -->
                     <div id="verifiedDiagnosticBanner" class="hidden mt-4 inline-flex flex-wrap items-center justify-center gap-2 px-4 py-1.5 rounded-full text-xs font-serif" style="background-color: rgba(0,0,0,0.38); color: var(--accent-metal);">
-                        <span id="verifiedBannerLead">✦ 已通過感官鑑定 · 認證風味：</span>
+                        <span id="verifiedBannerLead">✦ 已錄入氣味 · 認證風味：</span>
                         <strong id="verifiedFlavorLabel" class="text-white">迷幻</strong>
                     </div>
                 </div>
@@ -1703,7 +1758,7 @@
                             <label for="donorNameInput" class="block font-mono text-xs tracking-wider uppercase mb-2" style="color: var(--accent-metal);">
                                 樣本提供者
                             </label>
-                            <input type="text" id="donorNameInput" disabled required maxlength="24" placeholder="請留下您的暱稱或代號..." class="w-full px-4 py-3 rounded-xl border bg-black/40 text-base focus:outline-none transition-colors disabled:opacity-50" style="border-color: var(--border-dim);">
+                            <input type="text" id="donorNameInput" disabled required maxlength="24" placeholder="你希望被記得的名字" class="w-full px-4 py-3 rounded-xl border bg-black/40 text-base focus:outline-none transition-colors disabled:opacity-50" style="border-color: var(--border-dim);">
                         </div>
 
                         <!-- 2. 感官風味標籤（下拉式選單 <select id="flavor-select">） -->
@@ -1739,7 +1794,7 @@
                         <label for="confessionInput" class="block font-mono text-xs tracking-wider uppercase mb-2" style="color: var(--accent-metal);">
                             生日祝福
                         </label>
-                        <textarea id="confessionInput" disabled required rows="3" maxlength="420" placeholder="寫下您獻給他的生日祝詞、感官記憶或優雅的剖析..." class="w-full px-4 py-3 rounded-xl border bg-black/40 text-base focus:outline-none transition-colors resize-none disabled:opacity-50" style="border-color: var(--border-dim);"></textarea>
+                        <textarea id="confessionInput" disabled required rows="3" maxlength="420" placeholder="寫給他的話。越誠實，越好入口。" class="w-full px-4 py-3 rounded-xl border bg-black/40 text-base focus:outline-none transition-colors resize-none disabled:opacity-50" style="border-color: var(--border-dim);"></textarea>
                     </div>
 
                     <!-- 4. 夾帶影像證物 -->
@@ -1790,9 +1845,6 @@
                         <h2 class="heisei-title text-3xl sm:text-4xl font-bold">
                             食譜閱覽
                         </h2>
-                        <p class="text-xs sm:text-sm italic mt-1" style="color: var(--text-sub);">
-                            以兩側「＜」「＞」或方向鍵翻頁。
-                        </p>
                     </div>
                     </div>
                 </div>
@@ -1842,7 +1894,7 @@
 
                             <div class="p-4 rounded-xl" style="background-color: rgba(0,0,0,0.34);">
                                 <span class="font-mono text-[10px] tracking-widest uppercase block mb-1" style="color: var(--accent-metal);">
-                                    美食家品鑑批註
+                                    美食家摘記
                                 </span>
                                 <p id="bookConsultantCritique" class="font-serif text-sm leading-relaxed opacity-90 rs rs-note"></p>
                             </div>
@@ -1868,7 +1920,7 @@
                             <button type="button" class="rm-more hidden" id="rmMoreBtn" onclick="toggleRecipeFullText()">閱讀全文</button>
 
                             <div class="rm-orn" aria-hidden="true">· · ·</div>
-                            <p class="rm-note rs rs-note"><span class="rm-note-k">美食家筆記</span><span id="rmCritique"></span></p>
+                            <p class="rm-note rs rs-note"><span class="rm-note-k">美食家摘記</span><span id="rmCritique"></span></p>
                             <p class="rm-sign" id="rmDonor">Lady E.</p>
                             <p class="rm-meta" id="rmMeta"></p>
                             <button type="button" class="rm-find" onclick="findSpecimenInArchive()">在館藏中找到這一枚</button>
@@ -1899,13 +1951,13 @@
                 <div class="relative z-20 flex flex-wrap items-center justify-between gap-3 pb-4 mb-6 border-b border-white/15">
                     <div>
                         <span class="font-mono text-[11px] tracking-[0.32em] uppercase text-amber-300/80 block">暗房探照燈</span>
-                        <h3 class="heisei-title text-xl sm:text-2xl font-bold mt-0.5" style="-webkit-text-fill-color: #EAE4D3;">美食家的暗房私密手札</h3>
+                        <h3 class="heisei-title text-xl sm:text-2xl font-bold mt-0.5" style="-webkit-text-fill-color: #EAE4D3;">暗房手札</h3>
                     </div>
 
                     <div class="flex items-center gap-2.5">
                         <span class="hidden sm:inline font-serif text-xs italic text-slate-400">移動游標照亮手札</span>
                         <button type="button" id="darkroomLampToggleBtn" onclick="toggleDarkroomAlwaysOn()" class="px-3.5 py-1.5 rounded-full border border-amber-200/35 bg-black/60 text-xs font-serif text-amber-200 hover:border-amber-200 transition-all">
-                            <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.6c1.2 1.4 1.3 2.6 0 3.4-1.3-.8-1.2-2 0-3.4z"/><rect x="6.1" y="6.4" width="3.8" height="6.6" rx=".6"/><path d="M3.8 14.4h8.4"/></svg> 常亮顯影燈：關閉
+                            <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.6c1.2 1.4 1.3 2.6 0 3.4-1.3-.8-1.2-2 0-3.4z"/><rect x="6.1" y="6.4" width="3.8" height="6.6" rx=".6"/><path d="M3.8 14.4h8.4"/></svg> 留一盞燈
                         </button>
                     </div>
                 </div>
@@ -1969,10 +2021,10 @@
             <div class="flex flex-col md:flex-row md:items-end justify-between border-b pb-5 gap-4" style="border-color: var(--border-dim);">
                 <div>
                     <h2 class="heisei-title text-3xl sm:text-4xl font-bold">
-                        館藏陳列與品鑑
+                        收藏室
                     </h2>
                     <p class="text-xs sm:text-sm italic mt-1.5" style="color: var(--text-sub);">
-                        點卡片開啟全息視窗；按「翻轉」看背面的品鑑評語。
+                        每一枚都已編目。背面是關於你的批註。
                     </p>
                     <p id="bitternessIndexBadge" class="text-xs mt-1 tracking-wider" style="color: var(--accent-metal);">全館平均苦澀純度 84%，醇苦回甘</p>
                 </div>
@@ -2003,7 +2055,7 @@
             <div class="flex justify-stretch sm:justify-end -mt-4">
                 <label class="donor-search w-full sm:w-72">
                     <span class="donor-search-icon"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="M10.4 10.4L14 14"/></svg></span>
-                    <input id="donorSearchInput" type="search" autocomplete="off" placeholder="搜尋樣本提供者" aria-label="搜尋樣本提供者">
+                    <input id="donorSearchInput" type="search" autocomplete="off" placeholder="尋找氣味" aria-label="以名字尋找標本">
                 </label>
             </div>
 
@@ -2032,7 +2084,7 @@
             <!-- 全息箔光層 -->
             <div id="inspectHoloSheen" class="absolute inset-0 rounded-2xl z-0"></div>
 
-            <button type="button" onclick="closeInspectModal()" aria-label="關閉解剖檢視視窗" class="relative z-20 float-right w-9 h-9 rounded-full border flex items-center justify-center text-base font-mono hover:scale-110 transition-transform" style="border-color: var(--border-dim); color: var(--accent-metal); background-color: rgba(0,0,0,0.45);">
+            <button type="button" onclick="closeInspectModal()" aria-label="收回料理台" class="relative z-20 float-right w-9 h-9 rounded-full border flex items-center justify-center text-base font-mono hover:scale-110 transition-transform" style="border-color: var(--border-dim); color: var(--accent-metal); background-color: rgba(0,0,0,0.45);">
                 ✕
             </button>
 
@@ -2071,7 +2123,7 @@
             </div>
 
             <div class="relative z-10 mb-5 p-4 rounded-xl" style="background-color: rgba(0,0,0,0.24);">
-                <span class="font-mono text-[10px] tracking-widest uppercase block mb-1" style="color: var(--accent-metal);">美食家品鑑批註</span>
+                <span class="font-mono text-[10px] tracking-widest uppercase block mb-1" style="color: var(--accent-metal);">美食家摘記</span>
                 <p id="inspectCritiqueText" class="font-serif text-sm leading-relaxed opacity-90 rs rs-note"></p>
             </div>
 
@@ -2097,12 +2149,12 @@
          ========================================================================== -->
     <div id="diagnosisImageModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-lg opacity-0 pointer-events-none transition-opacity duration-300" onclick="if(event.target === this) closeDiagnosisImageModal()">
         <div class="frosted-panel max-w-md w-full rounded-2xl p-5 sm:p-6 relative max-h-[94vh] overflow-y-auto" style="background-color: var(--card-glass-deep);">
-            <button type="button" onclick="closeDiagnosisImageModal()" aria-label="關閉診斷書圖片" class="float-right w-9 h-9 rounded-full border flex items-center justify-center text-base font-mono hover:scale-110 transition-transform" style="border-color: var(--border-dim); color: var(--accent-metal); background-color: rgba(0,0,0,0.45);">✕</button>
-            <h3 class="heisei-title text-xl font-bold mb-1">診斷書已顯影</h3>
+            <button type="button" onclick="closeDiagnosisImageModal()" aria-label="關閉標籤圖片" class="float-right w-9 h-9 rounded-full border flex items-center justify-center text-base font-mono hover:scale-110 transition-transform" style="border-color: var(--border-dim); color: var(--accent-metal); background-color: rgba(0,0,0,0.45);">✕</button>
+            <h3 class="heisei-title text-xl font-bold mb-1">標籤已撕下</h3>
             <p class="text-xs sm:text-sm italic mb-4" style="color: var(--text-sub);">手機可直接長按圖片儲存；電腦請按下方按鈕下載。</p>
-            <img id="diagnosisImagePreview" src="" alt="感官氣味診斷書圖片" class="w-full rounded-xl mb-4" >
+            <img id="diagnosisImagePreview" src="" alt="氣味標籤圖片" class="w-full rounded-xl mb-4" >
             <div class="flex flex-wrap items-center justify-center gap-2.5">
-                <a id="diagnosisImageDownload" href="#" download="氣味診斷書.png" class="baroque-cta-btn px-6 py-2.5 rounded-full text-xs sm:text-sm font-serif tracking-wider text-white font-semibold">↓ 下載圖片</a>
+                <a id="diagnosisImageDownload" href="#" download="氣味標籤.png" class="baroque-cta-btn px-6 py-2.5 rounded-full text-xs sm:text-sm font-serif tracking-wider text-white font-semibold">↓ 下載圖片</a>
                 <button type="button" id="diagnosisImageCopyBtn" onclick="copyDiagnosisImageToClipboard()" class="px-5 py-2.5 rounded-full border text-xs sm:text-sm font-serif tracking-wider transition-all hover:scale-105" style="border-color: var(--border-bright); background-color: rgba(0,0,0,0.42); color: var(--accent-metal);">⧉ 複製圖片</button>
                 <button type="button" onclick="copyDiagnosisCertificate()" class="px-4 py-2.5 rounded-full border text-xs font-serif opacity-75 hover:opacity-100 transition-opacity" style="border-color: var(--border-dim);">複製文字版</button>
             </div>
@@ -2121,7 +2173,7 @@
            -------------------------------------------------------------------------- */
         let splashTimers = [];
         let splashCounterRaf = null;
-        const SPLASH_MONOLOGUE = '「每一滴眼淚，都是精心調味後的殘骸。歡迎光臨今晚的感官晚宴。」';
+        const SPLASH_MONOLOGUE = '「每一滴眼淚，都是精心調味後的殘骸。」';
 
         function clearAllSplashTimers() {
             splashTimers.forEach(id => clearTimeout(id));
@@ -2699,7 +2751,7 @@
                 category: '崩潰',
                 donor: '無名玻璃匠',
                 flavorNote: '碎裂黑曜海鹽 · 86% 風蝕碎瓷',
-                message: '雕像因風蝕而碎裂的邊角，在您的解剖刀與顯微鏡頭下獲得了永生。我將自己最不堪的破綻拆開，雙手奉上。',
+                message: '雕像因風蝕而碎裂的邊角，在您的解剖刀與顯微鏡頭下獲得了永生。我將自己最不堪的破綻拆開，雙手獻上。',
                 critique: '主動剝開外殼的勇氣值得嘉許，內裡露出的恐懼紋理清晰可見，灑上一點海鹽便是絕佳開胃菜。',
                 image: '',
                 resonances: 22,
@@ -3384,11 +3436,11 @@
             document.getElementById('certPlatingStyle').textContent = profile.plating;
             document.getElementById('certConsultantQuote').textContent = profile.quote;
 
-            // 2. 自動解封 Section 3「奉上您的情緒切片」並更新導覽列徽章
+            // 2. 自動解封 Section 3「獻上你的情緒切片」並更新導覽列徽章
             unlockSubmissionSection(bestCat);
 
             playGentleBellChime(659.25);
-            showToast('✦ 鑑定完成！已為您解封『奉上您的情緒切片』，並自動帶入專屬感官風味。');
+            showToast('✦ 鑑定完成。獻禮席位已解封，風味已代為選好。');
         }
 
         function skipDiagnosisAndUnlock() {
@@ -3413,7 +3465,7 @@
             document.getElementById('evidenceFileInput').disabled = false;
             document.getElementById('sealSubmitBtn').disabled = false;
 
-            // 更新頂部導覽列「奉上標本」徽章：待鑑定 -> 已解封
+            // 更新頂部導覽列「獻上標本」徽章：待鑑定 -> 已解封
             const lockBadge = document.getElementById('navSubmitLockBadge');
             if (lockBadge) {
                 lockBadge.innerHTML = '✦<span class="badge-text"> 已解封</span>';
@@ -3424,7 +3476,7 @@
             // 顯示認證徽章並自動選取下拉式選單對應風味
             const banner = document.getElementById('verifiedDiagnosticBanner');
             banner.classList.remove('hidden');
-            document.getElementById('verifiedBannerLead').textContent = skipped ? '✦ 未經鑑定 · 請自行選擇感官風味' : '✦ 已通過感官鑑定 · 認證風味：';
+            document.getElementById('verifiedBannerLead').textContent = skipped ? '✦ 未經鑑定 · 自選風味' : '✦ 已錄入氣味 · 認證風味：';
             document.getElementById('verifiedFlavorLabel').classList.toggle('hidden', skipped);
             document.getElementById('verifiedFlavorLabel').textContent = FLAVOR_META[autoSelectedFlavor]?.fullOption || autoSelectedFlavor;
 
@@ -3444,7 +3496,7 @@
 
         function copyDiagnosisCertificate() {
             if (!lastDiagnosisResult) return;
-            const summary = `【標本與殘骸 · 感官氣味診斷書】\n主導情緒成分：${lastDiagnosisResult.category}\n可可苦澀指數：${lastDiagnosisResult.cacao}\n建議盛裝器皿：${lastDiagnosisResult.plating}\n美食家評語：${lastDiagnosisResult.quote}`;
+            const summary = `【標本與殘骸 · 氣味標籤】\n主導情緒成分：${lastDiagnosisResult.category}\n可可苦澀指數：${lastDiagnosisResult.cacao}\n建議盛裝器皿：${lastDiagnosisResult.plating}\n美食家評語：${lastDiagnosisResult.quote}`;
 
             const tempArea = document.createElement('textarea');
             tempArea.value = summary;
@@ -3452,7 +3504,7 @@
             tempArea.select();
             try {
                 document.execCommand('copy');
-                showToast('✦ 已複製「感官氣味診斷書」文字版，可貼上至社群分享！');
+                showToast('✦ 已複製氣味標籤文字版。');
             } catch (e) {
                 showToast('複製失敗，請手動選取文字複製。');
             }
@@ -3542,7 +3594,7 @@
         async function handleOfferingSubmit(e) {
             e.preventDefault();
             if (!isQuizVerified) {
-                showToast('請先完成上方「感官氣味診斷書」以解封獻禮席位。');
+                showToast('請先完成上方的「氣味標籤」。');
                 return;
             }
             if (isSealingOffering) return;
@@ -3617,7 +3669,7 @@
 
             triggerWaxSealPress();
             playGentleBellChime(440);
-            showToast(`✦ ${newSpecimen.id}（${category}）已蓋下火漆封存並懸掛上肺葉根脈！`);
+            showToast(`✦ ${newSpecimen.id} 已封存。多謝款待。`);
 
             setTimeout(() => {
                 document.getElementById('section-atlas').scrollIntoView({ behavior: 'smooth' });
@@ -3688,7 +3740,7 @@
                 : filtered;
             if (shown.length === 0) {
                 grid.innerHTML = gallerySearchTerm
-                    ? `<p class="col-span-full text-center py-12 text-sm" style="color: var(--text-sub);">館藏裡還沒有「${escapeHTML(gallerySearchTerm)}」的標本。換個名字試試，或到「奉上標本」留下一枚。</p>`
+                    ? `<p class="col-span-full text-center py-12 text-sm" style="color: var(--text-sub);">館藏裡還沒有「${escapeHTML(gallerySearchTerm)}」的標本。換個名字試試，或到「獻上標本」留下一枚。</p>`
                     : `<p class="col-span-full text-center py-12 text-sm" style="color: var(--text-sub);">這個分類還沒有標本。</p>`;
                 return;
             }
@@ -3701,7 +3753,7 @@
                 scene.setAttribute('data-tilt-max', '7');
                 scene.tabIndex = 0;
                 scene.setAttribute('role', 'button');
-                scene.setAttribute('aria-label', `開啟 ${spec.donor} 的全息解剖視窗`);
+                scene.setAttribute('aria-label', `把 ${spec.donor} 的標本放上料理台`);
                 // 點擊卡片任意處即開啟全息視窗（翻轉等按鈕除外）
                 scene.addEventListener('click', (ev) => {
                     if (ev.target.closest('button, a')) return;
@@ -3751,7 +3803,7 @@
                             <div class="pt-1 flex items-center justify-between gap-2 text-xs">
                                 <span class="font-serif font-semibold text-sm truncate" style="color: var(--accent-metal);">${escapeHTML(spec.donor)}</span>
                                 <button type="button" onclick="toggleCardFlip(this)" class="px-3 py-1.5 rounded-full border font-serif tracking-wider transition-all hover:scale-105 shrink-0" style="border-color: var(--border-bright); background-color: rgba(0,0,0,0.35); color: var(--accent-metal);">
-                                    翻轉檢視美食家批註 ↻
+                                    翻轉檢視美食家摘記 ↻
                                 </button>
                             </div>
                         </div>
@@ -3761,7 +3813,7 @@
                             <div>
                                 <div class="flex items-center justify-between border-b pb-3 mb-4" style="border-color: var(--border-dim);">
                                     <div>
-                                        <span class="font-serif text-sm font-bold inline-flex items-center gap-1.5">美食家私密解剖批註${sigil}</span>
+                                        <span class="font-serif text-sm font-bold inline-flex items-center gap-1.5">美食家摘記${sigil}</span>
                                     </div>
                                     <div class="w-7 h-9">${getVesselSVG(spec.category, 'w-full h-full')}</div>
                                 </div>
@@ -3770,14 +3822,14 @@
                                     風味分析：${escapeHTML(flavorTag)}
                                 </div>
 
-                                <p class="card-well font-body italic text-[0.94rem] leading-[1.9] p-4 rounded-xl rs rs-card line-clamp-6">
+                                <p class="card-critique card-well font-body italic text-[0.94rem] leading-[1.9] p-4 rounded-xl rs rs-card line-clamp-6">
                                     「${escapeHTML(critiqueText)}」
                                 </p>
                             </div>
 
                             <div class="pt-1 flex items-center justify-between gap-2 text-xs">
                                 <button type="button" onclick="openInspectModal('${spec.id}')" class="font-mono underline opacity-80 hover:opacity-100">
-                                    開啟全息視窗
+                                    放上料理台
                                 </button>
                                 <button type="button" onclick="toggleCardFlip(this)" class="px-3 py-1.5 rounded-full border font-serif tracking-wider transition-all hover:scale-105" style="border-color: var(--border-bright); background-color: var(--accent-primary); color: #fff;">
                                     ↺ 翻回正面祝福
@@ -3825,11 +3877,30 @@
             });
         }
 
+        // 背面的美食家摘記：除了為這枚標本寫下的那句，每次翻面再從同類的私語中隨機挑一句
+        const CRITIQUE_POOL = {
+            '迷幻': ['你的呼吸在第三句話之後慢了半拍。我喜歡你假裝清醒的樣子。', '迷霧裡的你最誠實，可惜你自己看不見。', '這份恍惚還很新鮮，別急著醒來。'],
+            '狂熱': ['你燒得太快了。不過灰燼的香氣，我也收。', '一百一十八下。你明知道我在數。', '這麼燙的東西，最好趁熱入口。'],
+            '崩潰': ['裂縫的角度很漂亮，不必拼回去。', '你碎掉的聲音，比道歉好聽。', '別撿了。碎片我會一片一片編號。'],
+            '腐敗': ['你開始褪色了，這正是我等的火候。', '九成五的苦，沒有一絲討好。很好。', '放著吧。腐壞需要時間，而我有的是。']
+        };
+
+        function pickCritique(spec) {
+            const own = spec.critique || generateDefaultCritique(spec.category, spec.donor);
+            const pool = [own, ...(CRITIQUE_POOL[spec.category] || [])];
+            return pool[Math.floor(Math.random() * pool.length)];
+        }
+
         function toggleCardFlip(btnEl) {
             const scene = btnEl.closest('.flip-card-scene');
-            if (scene) {
-                scene.classList.toggle('is-flipped');
+            if (!scene) return;
+            const flipping = !scene.classList.contains('is-flipped');
+            if (flipping) {
+                const spec = specimens.find(sp => sp.id === scene.dataset.specimenId);
+                const el = scene.querySelector('.card-critique');
+                if (spec && el) el.textContent = `「${pickCritique(spec)}」`;
             }
+            scene.classList.toggle('is-flipped');
         }
 
         function generateDefaultCritique(category, donor) {
@@ -3872,7 +3943,7 @@
         function toggleDarkroomAlwaysOn() {
             const isLit = darkroomChamber.classList.toggle('lamp-always-on');
             const btn = document.getElementById('darkroomLampToggleBtn');
-            btn.innerHTML = `${UI_ICONS.candle} 常亮顯影燈：${isLit ? '開啟' : '關閉'}`;
+            btn.innerHTML = `${UI_ICONS.candle} ${isLit ? '熄燈' : '留一盞燈'}`;
         }
 
         /* --------------------------------------------------------------------------
@@ -4668,6 +4739,10 @@
             const right = document.getElementById('botanicalTuberose');
             if (left) left.innerHTML = buildWormwoodSVG();
             if (right) right.innerHTML = buildTuberoseSVG();
+            const mTop = document.getElementById('stageSprigTop');
+            const mBottom = document.getElementById('stageSprigBottom');
+            if (mTop) mTop.innerHTML = buildMiniWormwood(seededRandom(613));
+            if (mBottom) mBottom.innerHTML = buildMiniTuberose(seededRandom(907));
         }
 
         /* --------------------------------------------------------------------------
@@ -4694,10 +4769,17 @@
             };
             fork.addEventListener('pointerenter', () => wobble(fork));
             knife.addEventListener('pointerenter', () => wobble(knife));
+            fork.addEventListener('click', () => wobble(fork));
+            knife.addEventListener('click', () => wobble(knife));
             if (plate) {
                 plate.addEventListener('pointerenter', () => {
                     wobble(fork);
                     setTimeout(() => wobble(knife), 110);
+                });
+                plate.addEventListener('click', () => {
+                    wobble(fork);
+                    setTimeout(() => wobble(knife), 110);
+                    if (typeof beatPlatedHeart === 'function') beatPlatedHeart(1.1);
                 });
             }
 
@@ -4791,7 +4873,7 @@
            -------------------------------------------------------------------------- */
         function setupSpiceDust() {
             const canvas = document.getElementById('spiceCanvas');
-            if (!canvas || PREFERS_REDUCED_MOTION || window.matchMedia('(hover: none)').matches) {
+            if (!canvas || PREFERS_REDUCED_MOTION) {
                 if (canvas) canvas.remove();
                 return;
             }
@@ -4880,6 +4962,27 @@
                 lastX = e.clientX; lastY = e.clientY;
                 spawn(e.clientX, e.clientY, dx, dy);
             }, { passive: true });
+
+            // 觸控：點一下灑一小撮；長按持續倒出，手指移動時跟著走，放開或開始捲動就停
+            let pourTimer = null, pourLoop = null, touchX = 0, touchY = 0;
+            const stopPour = () => {
+                clearTimeout(pourTimer); clearInterval(pourLoop);
+                pourTimer = pourLoop = null;
+            };
+            window.addEventListener('pointerdown', (e) => {
+                if (e.pointerType === 'mouse') return;
+                touchX = e.clientX; touchY = e.clientY;
+                for (let k = 0; k < 4; k++) spawn(touchX, touchY, 0, 0);
+                stopPour();
+                pourTimer = setTimeout(() => {
+                    pourLoop = setInterval(() => spawn(touchX, touchY, 0, 0), 45);
+                }, 260);
+            }, { passive: true });
+            window.addEventListener('pointermove', (e) => {
+                if (e.pointerType === 'mouse') return;
+                touchX = e.clientX; touchY = e.clientY;
+            }, { passive: true });
+            ['pointerup', 'pointercancel', 'blur'].forEach(ev => window.addEventListener(ev, stopPour, { passive: true }));
         }
 
         /* --------------------------------------------------------------------------
@@ -5003,7 +5106,7 @@
             titleGrad.addColorStop(1, t.metal);
             ctx.fillStyle = titleGrad;
             ctx.shadowColor = t.glow; ctx.shadowBlur = 28;
-            ctx.fillText('感官氣味診斷書', W / 2 + 7, 236);
+            ctx.fillText('氣味標籤', W / 2 + 7, 236);
             ctx.shadowBlur = 0;
             setSpacing(ctx, 2);
             ctx.font = `400 28px ${SERIF_BODY}`;
@@ -5131,7 +5234,7 @@
             if (btn) { btn.disabled = true; btn.textContent = '顯影中……'; }
 
             try {
-                const sample = '感官氣味診斷書標本與殘骸主導情緒成分可可苦澀指數建議盛裝器皿鑑定時刻美食家冷靜評語❖' +
+                const sample = '氣味標籤標本與殘骸主導情緒成分可可苦澀指數建議盛裝器皿鑑定時刻美食家冷靜評語❖' +
                     lastDiagnosisResult.category + lastDiagnosisResult.cacao + lastDiagnosisResult.plating + lastDiagnosisResult.quote +
                     (FLAVOR_META[lastDiagnosisResult.category]?.subtitle || '') + '0123456789.:·';
                 if (document.fonts && document.fonts.load) {
@@ -5166,7 +5269,7 @@
                 document.getElementById('diagnosisImagePreview').src = diagnosisImageUrl;
                 const dl = document.getElementById('diagnosisImageDownload');
                 dl.href = diagnosisImageUrl;
-                dl.download = `氣味診斷書_${lastDiagnosisResult.category}.png`;
+                dl.download = `氣味標籤_${lastDiagnosisResult.category}.png`;
                 const copyBtn = document.getElementById('diagnosisImageCopyBtn');
                 copyBtn.classList.toggle('hidden', !(navigator.clipboard && window.ClipboardItem));
 
@@ -5174,7 +5277,7 @@
                 modal.classList.remove('opacity-0', 'pointer-events-none');
                 playGentleBellChime(698.46);
             } catch (err) {
-                showToast('診斷書圖片生成失敗，已改為複製文字版。');
+                showToast('標籤圖片生成失敗，已改為複製文字版。');
                 copyDiagnosisCertificate();
             } finally {
                 if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
@@ -5189,7 +5292,7 @@
             if (!diagnosisImageBlob) return;
             try {
                 await navigator.clipboard.write([new ClipboardItem({ 'image/png': diagnosisImageBlob })]);
-                showToast('✦ 已複製診斷書圖片，可直接貼到社群或聊天室。');
+                showToast('✦ 已複製氣味標籤圖片。');
             } catch (err) {
                 showToast('這個瀏覽器不允許複製圖片，請改用「下載圖片」或長按儲存。');
             }
@@ -5276,18 +5379,29 @@
             if (!far || !mid) return;
             const rand = Math.random;
 
-            const words = ['標本與殘骸', 'SPECIMENS', '& REMAINS', 'LA TABLE', '苦艾 · 夜來香', 'PNEUMA'];
+            // Le Spoglie＝遺骸／Dolce Decadenza＝甜美的頹敗／Natura Morta＝靜物（死去的自然）
+            const words = ['Le Spoglie', 'Dolce Decadenza', 'Natura Morta'];
             sizeParallaxLayers();
             // 避開首屏：位置以「首屏底部之下的比例」記錄，實際的首屏高度由 --hero-safe 在每次版面變動時更新
             const safeTop = f => `calc(var(--hero-safe, 0px) + (100% - var(--hero-safe, 0px)) * ${f.toFixed(4)})`;
-            // 遠景大字約每 0.85 個視窗高度出現一次，左右交錯
+            // 遠景義大利文：約每 0.55 個視窗高度一句，橫向位置、大小、傾角、正斜體都隨機，散落在背景各處
             const farH = parseFloat(far.style.height) || window.innerHeight * 2;
-            const wordCount = Math.max(3, Math.round(farH / (window.innerHeight * 0.85)));
+            const wordCount = Math.max(6, Math.round(farH / (window.innerHeight * 0.38)));
+            const order = [];
+            while (order.length < wordCount) order.push(...words.slice().sort(() => rand() - 0.5));
             let farHtml = '';
             for (let i = 0; i < wordCount; i++) {
-                const leftSide = i % 2 === 0;
-                const f = (i + 0.15 + rand() * 0.4) / wordCount;
-                farHtml += `<span class="parallax-far-word" style="top:${safeTop(f)}; ${leftSide ? 'left' : 'right'}:${(-4 + rand() * 10).toFixed(1)}%;">${words[i % words.length]}</span>`;
+                const f = (i + 0.1 + rand() * 0.6) / wordCount;
+                const vw = window.innerWidth;
+                const word = order[i];
+                // 依字數估算寬度，讓整句大致落在畫面內，只在邊緣稍微出血
+                const maxSize = Math.min(vw < 640 ? 64 : 150, (vw * 0.95) / (word.length * 0.5));
+                const size = Math.max(vw < 640 ? 34 : 52, maxSize * (0.55 + rand() * 0.45));
+                const wPct = (word.length * 0.5 * size) / vw * 100;
+                const x = -3 + rand() * Math.max(2, 100 - wPct + 3);     // 左緣位置（%）
+                const rot = (rand() - 0.5) * 12;
+                const italic = rand() < 0.6;
+                farHtml += `<span class="parallax-far-word" style="top:${safeTop(f)}; left:${x.toFixed(1)}%; font-size:${size.toFixed(0)}px; font-style:${italic ? 'italic' : 'normal'}; transform: rotate(${rot.toFixed(1)}deg);">${order[i]}</span>`;
             }
             far.innerHTML = farHtml;
 
@@ -5421,8 +5535,12 @@
             heroDepthState.layers = Array.from(hero.querySelectorAll('[data-depth]')).map(el => ({
                 el, depth: parseFloat(el.dataset.depth) || 0, cx: 0, cy: 0, tx: 0, ty: 0
             }));
-            heroDepthState.enabled = !PREFERS_REDUCED_MOTION && !window.matchMedia('(hover: none)').matches;
-            if (!heroDepthState.enabled) return;
+            if (PREFERS_REDUCED_MOTION) return;
+            heroDepthState.enabled = true;
+            if (IS_TOUCH_DEVICE) {
+                setupHeroTouchDepth(hero);
+                return;
+            }
 
             const MAX = 18; // 前景最大位移 px
             window.addEventListener('mousemove', (e) => {
@@ -5549,6 +5667,155 @@
             applyFontScale(idx >= 0 ? idx : 1, { persist: false });
         }
 
+        /* --------------------------------------------------------------------------
+           17l. 觸控裝置的補償效果：捲動、點擊、手指與陀螺儀取代游標
+           -------------------------------------------------------------------------- */
+        const IS_TOUCH_DEVICE = window.matchMedia('(hover: none)').matches;
+        const gyroTilt = { x: 0, y: 0, active: false };
+        let gyroBase = null, gyroAsked = false, gyroRaf = null;
+
+        function onDeviceTilt(e) {
+            if (e.gamma == null || e.beta == null) return;
+            if (!gyroBase) gyroBase = { b: e.beta, g: e.gamma };
+            // 基準點慢慢跟上目前的握持角度，避免手機換個姿勢後一直歪著
+            gyroBase.b += (e.beta - gyroBase.b) * 0.01;
+            gyroBase.g += (e.gamma - gyroBase.g) * 0.01;
+            gyroTilt.x = Math.max(-0.5, Math.min(0.5, (e.gamma - gyroBase.g) / 28));
+            gyroTilt.y = Math.max(-0.5, Math.min(0.5, (e.beta - gyroBase.b) / 28));
+            gyroTilt.active = true;
+            if (!gyroRaf) gyroRaf = requestAnimationFrame(() => {
+                gyroRaf = null;
+                window.dispatchEvent(new Event('gyro-tilt'));
+            });
+        }
+
+        function enableGyro() {
+            if (gyroAsked || PREFERS_REDUCED_MOTION) return;
+            gyroAsked = true;
+            const D = window.DeviceOrientationEvent;
+            if (!D) return;
+            if (typeof D.requestPermission === 'function') {
+                // iPhone／iPad：必須在使用者點擊時請求授權
+                D.requestPermission().then(state => {
+                    if (state === 'granted') window.addEventListener('deviceorientation', onDeviceTilt);
+                }).catch(() => {});
+            } else {
+                window.addEventListener('deviceorientation', onDeviceTilt);
+            }
+        }
+
+        // 首屏：捲動時三層以不同速度上移，再疊加手機傾斜的反向位移
+        function setupHeroTouchDepth(hero) {
+            const MAX = 14;
+            const update = () => {
+                const r = hero.getBoundingClientRect();
+                const prog = Math.max(0, Math.min(1, -r.top / Math.max(1, r.height)));
+                heroDepthState.layers.forEach(l => {
+                    l.tx = -gyroTilt.x * 2 * MAX * l.depth;
+                    l.ty = -prog * 70 * l.depth - gyroTilt.y * 2 * MAX * l.depth;
+                });
+                startHeroDepthLoop();
+            };
+            window.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('gyro-tilt', () => { if (hero.getBoundingClientRect().bottom > 0) update(); });
+            update();
+        }
+
+        // 卡片、測驗卡、主舞台：隨手機傾斜微微 3D 偏移（只處理畫面中的元素）
+        function setupGyroCardTilt() {
+            window.addEventListener('gyro-tilt', () => {
+                const vh = window.innerHeight;
+                document.querySelectorAll('[data-tilt]').forEach(el => {
+                    const r = el.getBoundingClientRect();
+                    if (r.bottom < 0 || r.top > vh) return;
+                    const max = parseFloat(el.dataset.tiltMax || '6');
+                    el.style.transition = 'transform 0.25s ease-out';
+                    el.style.transform = `perspective(1000px) rotateX(${(-gyroTilt.y * max * 2).toFixed(2)}deg) rotateY(${(gyroTilt.x * max * 2).toFixed(2)}deg)`;
+                });
+            });
+        }
+
+        // 主舞台進入畫面就自動活起來
+        function setupStageLive() {
+            const shell = document.querySelector('.stage-shell');
+            if (!shell || !window.IntersectionObserver) return;
+            new IntersectionObserver(entries => {
+                shell.classList.toggle('stage-live', entries[0].isIntersecting);
+            }, { threshold: 0.3 }).observe(shell);
+        }
+
+        // 畫面正中央的卡片對焦顯色
+        function setupCardFocus() {
+            let ticking = false;
+            const update = () => {
+                ticking = false;
+                const mid = window.innerHeight / 2;
+                let best = null, bestD = Infinity;
+                document.querySelectorAll('#archiveCardsGrid .flip-card-scene').forEach(el => {
+                    const r = el.getBoundingClientRect();
+                    const d = Math.abs(r.top + r.height / 2 - mid);
+                    if (d < bestD) { bestD = d; best = el; }
+                    el.classList.remove('is-focused');
+                });
+                if (best && bestD < window.innerHeight * 0.32) best.classList.add('is-focused');
+            };
+            window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+        }
+
+        // 手指觸碰處攪動背景流場
+        function setupTouchVortex() {
+            let release = null;
+            const follow = (e) => {
+                const t = e.touches && e.touches[0];
+                if (!t) return;
+                mousePos.x = t.clientX; mousePos.y = t.clientY;
+                clearTimeout(release);
+            };
+            window.addEventListener('touchstart', follow, { passive: true });
+            window.addEventListener('touchmove', follow, { passive: true });
+            window.addEventListener('touchend', () => {
+                clearTimeout(release);
+                release = setTimeout(() => { mousePos.x = -9999; mousePos.y = -9999; }, 700);
+            }, { passive: true });
+        }
+
+        // 點擊處閃現一把線條小餐刀（與漣漪一起）
+        const TAP_KNIFE_SVG = '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.1"><g transform="rotate(-45 16 16)"><path d="M16 1.4 C19.2 4.8 19.5 10.6 18.8 15.9 L14.5 15.9 L14.5 3.8 C14.5 2.6 15.1 1.7 16 1.4 Z"/><path d="M15.6 5 L15.6 13.6"/><path d="M13.6 16.8 L19.6 16.8"/><rect x="14.4" y="18.4" width="4.6" height="12" rx="2.3"/></g></svg>';
+        function flashTapKnife(x, y) {
+            const layer = document.getElementById('rippleLayer');
+            if (!layer || PREFERS_REDUCED_MOTION) return;
+            const k = document.createElement('span');
+            k.className = 'tap-knife';
+            k.style.left = `${x}px`;
+            k.style.top = `${y}px`;
+            k.innerHTML = TAP_KNIFE_SVG;
+            layer.appendChild(k);
+            const a = k.animate([
+                { opacity: 0, transform: 'translate(6px, -6px) rotate(-18deg) scale(0.8)' },
+                { opacity: 1, transform: 'translate(0, 0) rotate(0deg) scale(1)', offset: 0.35 },
+                { opacity: 0, transform: 'translate(-2px, 3px) rotate(6deg) scale(0.96)' }
+            ], { duration: 620, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+            a.finished.then(() => k.remove()).catch(() => k.remove());
+        }
+
+        function setupTouchCompensations() {
+            if (!IS_TOUCH_DEVICE) return;
+            setupStageLive();
+            setupCardFocus();
+            setupTouchVortex();
+            if (PREFERS_REDUCED_MOTION) return;
+            setupGyroCardTilt();
+            window.addEventListener('pointerdown', (e) => {
+                if (e.pointerType !== 'mouse') flashTapKnife(e.clientX, e.clientY);
+            }, { passive: true });
+            // Android 等不需授權的裝置直接啟用；iPhone 在第一次點擊時請求授權
+            if (!(window.DeviceOrientationEvent && typeof window.DeviceOrientationEvent.requestPermission === 'function')) {
+                enableGyro();
+            } else {
+                window.addEventListener('touchend', enableGyro, { once: true, passive: true });
+            }
+        }
+
         /* 按下滑鼠時餐刀反白 */
         function setupKnifePressCursor() {
             const root = document.documentElement;
@@ -5591,6 +5858,7 @@
             setupDonorSearch();
             setupScrollJumpRail();
             setupRecipeSwipe();
+            setupTouchCompensations();
             animateSporeNetwork();
             startOpeningCeremony();
         });
