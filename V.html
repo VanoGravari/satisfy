@@ -726,9 +726,9 @@
             transform-style: preserve-3d;
             transition: transform 0.18s ease-out, box-shadow 0.35s ease;
         }
-        #inspectHoloSheen {
-            background: radial-gradient(circle 280px at var(--holo-x, 50%) var(--holo-y, 50%), rgba(255, 255, 255, 0.16), transparent 70%);
-            pointer-events: none;
+        /* 反光直接畫在卡片自己的底圖上：卡片內容捲動時，光斑仍貼著視窗、跟著游標 */
+        #inspectHoloCard {
+            background-image: radial-gradient(circle 280px at var(--holo-x, 50%) var(--holo-y, 50%), rgba(255, 255, 255, 0.16), transparent 70%);
         }
 
 
@@ -3306,9 +3306,6 @@
 
     <div id="inspectModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-lg opacity-0 pointer-events-none transition-opacity duration-300" onclick="if(event.target === this) closeInspectModal()">
         <div id="inspectHoloCard" class="frosted-panel max-w-xl w-full rounded-2xl p-6 sm:p-8 relative transform scale-95 transition-all duration-300 max-h-[92vh] overflow-y-auto" style="background-color: var(--card-glass-deep);">
-            <!-- 全息箔光層 -->
-            <div id="inspectHoloSheen" class="absolute inset-0 rounded-2xl z-0"></div>
-
             <button type="button" onclick="closeInspectModal()" aria-label="收回料理台" class="relative z-20 float-right w-9 h-9 rounded-full border flex items-center justify-center text-base font-mono hover:scale-110 transition-transform" style="border-color: var(--border-dim); color: var(--accent-metal); background-color: rgba(0,0,0,0.45);">
                 ✕
             </button>
@@ -5947,7 +5944,7 @@
            14. 3D 全息解剖檢視卡彈窗 (游標傾斜＋金屬箔光反光)
            -------------------------------------------------------------------------- */
         const inspectHoloCard = document.getElementById('inspectHoloCard');
-        const inspectHoloSheen = document.getElementById('inspectHoloSheen');
+        const inspectHoloSheen = inspectHoloCard;
 
         inspectHoloCard.addEventListener('pointermove', (e) => {
             if (e.pointerType !== 'mouse') return; // 觸控點一下不要把卡片卡在歪斜與光斑定格
