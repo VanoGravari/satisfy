@@ -1013,12 +1013,11 @@
         @keyframes hcgMarch { to { stroke-dashoffset: -12.4; } }
         @media (prefers-reduced-motion: reduce) { .hcg-line { animation: none; } .hcg-knife { display: none; } }
         .heart-cut-hint.is-gone { opacity: 0; }
-        .heart-cut-hint2 { display: inline-block; margin-top: 0.3rem; font-size: 0.72rem; letter-spacing: 0.12em; opacity: 0.8; }
         .heart-whisper { font-size: 0.85rem; letter-spacing: 0.12em; color: var(--text-main); opacity: 0; }
         .heart-whisper.is-on { opacity: 1; }
         @media (max-width: 640px) {
             .heart-cut-zone { left: 34%; width: 32%; top: 72%; height: 22%; }
-            .heart-cut-hint { top: 91.5%; font-size: 12px; }
+            .heart-cut-hint { top: 95%; font-size: 12px; }
             .heart-whisper { top: 95%; font-size: 12px; white-space: normal; width: 92%; }
         }
         .heart-half { transform-box: fill-box; transform-origin: center; }
@@ -2718,7 +2717,7 @@
 
                     <!-- 盤中心臟：用刀（滑鼠按住或手指）劃過就會切開 -->
                     <div id="heartCutZone" class="heart-cut-zone" role="button" tabindex="0" aria-label="用刀劃開盤中的心臟"></div>
-                    <p id="heartCutHint" class="heart-cut-hint" aria-hidden="true">沿著虛線，劃開它。<br><span class="heart-cut-hint2">手指滑過，就能切開。</span></p>
+                    <p id="heartCutHint" class="heart-cut-hint" aria-hidden="true">沿著虛線，劃開它。</p>
                     <p id="heartWhisper" class="heart-whisper" aria-live="polite"></p>
                 </div>
 
