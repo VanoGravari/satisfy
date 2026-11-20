@@ -1126,7 +1126,7 @@
         .flavor-circle.is-on { background: var(--accent-metal); border-color: var(--accent-metal); color: var(--bg-primary); }
         .flavor-circle:disabled { opacity: 0.45; cursor: not-allowed; }
 
-        /* ===== 祝福手稿字數 ===== */
+        /* ===== 獻詞字數 ===== */
         .char-count { margin: 0.35rem 0.2rem 0 0; text-align: right; font-family: 'Cormorant Garamond', serif; font-size: 0.9rem; color: var(--text-sub); opacity: 0.7; transition: color 0.3s ease, opacity 0.3s ease; }
         .char-count.is-near { color: var(--accent-metal); opacity: 1; }
 
@@ -2958,7 +2958,7 @@
                     <!-- 3. 情緒切片與生日祝福 -->
                     <div>
                         <label for="confessionInput" class="block font-mono text-xs tracking-wider uppercase mb-2" style="color: var(--accent-metal);">
-                            祝福手稿
+                            獻詞
                         </label>
                         <textarea id="confessionInput" disabled required rows="3" maxlength="1000" placeholder="寫給他的話。&#10;越誠實越好入口。" class="w-full px-4 py-3 rounded-xl border bg-black/40 text-base focus:outline-none transition-colors resize-none disabled:opacity-50" style="border-color: var(--border-dim);"></textarea>
                         <p class="char-count" aria-live="polite"><span id="confessionCount">0</span> / 1000</p>
@@ -3004,7 +3004,7 @@
                             或許你想與他分享……（選填）
                         </label>
                         <input type="url" id="videoUrlInput" disabled inputmode="url" autocomplete="off" placeholder="貼上 YouTube 連結，例如 https://youtu.be/…" class="w-full px-4 py-3 rounded-xl border bg-black/40 text-base focus:outline-none transition-colors disabled:opacity-50" style="border-color: var(--border-dim);">
-                        <p id="videoUrlError" class="hidden mt-1.5 text-xs" style="color: var(--text-sub);">這條連結收不進標本瓶。請貼 YouTube 的影片網址（watch、youtu.be 或 Shorts）。</p>
+                        <p id="videoUrlError" class="hidden mt-1.5 text-xs" style="color: var(--text-sub);">此處僅收錄 YouTube 影像片段，請重新檢視連結格式。</p>
                         <div id="videoPreviewWrap" class="hidden mt-3">
                             <div class="video-preview" data-media>
                                 <img id="videoPreviewImg" src="" referrerpolicy="no-referrer" alt="影片縮圖" draggable="false">
@@ -4138,7 +4138,7 @@
                 return true;
             } catch (err) {
                 sheetsOnline = false;
-                if (!quiet) showToast('暫時連不到館藏試算表，先顯示這台裝置上的館藏。');
+                if (!quiet) showToast('館藏暫時連不上，先顯示手邊已有的。');
                 return false;
             }
         }
@@ -4198,7 +4198,7 @@
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(specimens));
             } catch (err) {
-                showToast('這台裝置的收藏櫃已滿，新的影像可能無法長久保留。');
+                showToast('收藏櫃已滿，新的影像可能無法長久保留。');
             }
         }
 
@@ -4648,7 +4648,7 @@
                 document.execCommand('copy');
                 showToast('已複製氣味標籤文字版。');
             } catch (e) {
-                showToast('複製失敗，請手動選取文字複製。');
+                showToast('無法複製，請自己選取文字。');
             }
             document.body.removeChild(tempArea);
         }
@@ -4672,7 +4672,7 @@
             document.getElementById('liveFlavorTastingDesc').textContent = meta.desc;
         }
 
-        // 祝福手稿的字數提示：快到上限時變燙金
+        // 獻詞的字數提示：快到上限時變燙金
         function updateConfessionCount() {
             const ta = document.getElementById('confessionInput');
             const out = document.getElementById('confessionCount');
@@ -4727,12 +4727,12 @@
 
         function handleEvidenceFile(file) {
             if (!file || !file.type.startsWith('image/')) {
-                showToast('請上傳圖片或 GIF（JPG / PNG / WebP / GIF）。');
+                showToast('此處只收圖片或 GIF（JPG / PNG / WebP / GIF）。');
                 return;
             }
             const isGif = file.type === 'image/gif';
             if (isGif && file.size > GIF_MAX_BYTES) {
-                showToast('這份動態影像太沉重（限 3MB 內），標本瓶承載不了。');
+                showToast('這份動態影像過於沉重（限 3MB 內），標本瓶無法承載。');
                 return;
             }
 
@@ -5011,7 +5011,7 @@
         let pendingAvatarDataUrl = '';
         function handleAvatarFile(file) {
             if (!file || !file.type.startsWith('image/')) {
-                showToast('請選擇圖片檔（JPG / PNG / WebP）。');
+                showToast('此處只收圖片（JPG / PNG / WebP）。');
                 return;
             }
             const reader = new FileReader();
@@ -5196,7 +5196,7 @@
                         composeSpecimens();
                     }
                 } catch (err) {
-                    showToast('暫時無法寄到館藏，已先封存在這台裝置上，恢復連線後可再送一次。');
+                    showToast('此次無法送進館藏，先暫存在手邊，連上後可以再送一次。');
                 } finally {
                     isSealingOffering = false;
                     btn.disabled = false;
@@ -5246,7 +5246,7 @@
             triggerWaxSealPress();
             playGentleBellChime(440);
             showToast(newSpecimen.pendingSync
-                ? `${serialLabel(newSpecimen.id)} 先收在這台裝置的館藏，連上後會一併送出。`
+                ? `${serialLabel(newSpecimen.id)} 先暫存在手邊，連上後會一併送出。`
                 : `已寫入館藏：${serialLabel(newSpecimen.id)}。食譜頁可以下載這道菜的菜單卡。`);
 
             setTimeout(() => {
@@ -6254,7 +6254,7 @@
             try { localStorage.setItem(AMBIENT_PREF_KEY, ambientWanted ? 'on' : 'off'); } catch (e) {}
             paintAmbientState(ambientWanted);
             if (!applyAmbientSoundscape(ambientWanted) && ambientWanted) {
-                showToast('瀏覽器限制了音訊播放，請再點擊一次聲景按鈕。');
+                showToast('瀏覽器暫時不允許聲景，請再點一次。');
             }
         }
 
@@ -7285,7 +7285,7 @@
                 modal.classList.remove('opacity-0', 'pointer-events-none');
                 playGentleBellChime(698.46);
             } catch (err) {
-                showToast('標籤圖片生成失敗，已改為複製文字版。');
+                showToast('標籤無法顯影，已改為複製文字版。');
                 copyDiagnosisCertificate();
             } finally {
                 if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
@@ -7606,7 +7606,7 @@
                 document.getElementById('diagnosisImageModal').classList.remove('opacity-0', 'pointer-events-none');
                 playGentleBellChime(698.46);
             } catch (err) {
-                showToast('菜單卡生成失敗，請再試一次。');
+                showToast('菜單卡無法顯影，請再試一次。');
             }
         }
 
@@ -7620,7 +7620,7 @@
                 await navigator.clipboard.write([new ClipboardItem({ 'image/png': diagnosisImageBlob })]);
                 showToast('已複製圖片。');
             } catch (err) {
-                showToast('這個瀏覽器不允許複製圖片，請改用「下載圖片」或長按儲存。');
+                showToast('此瀏覽器不允許複製圖片，請改用「下載圖片」或長按儲存。');
             }
         }
 
