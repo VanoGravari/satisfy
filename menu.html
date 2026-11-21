@@ -1102,7 +1102,7 @@ Reperto n. 001
 </div>
 </div>
 <div id="askModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-lg opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="askTitle" onclick="if(event.target === this) closeAskModal()">
-<div id="askCard" class="frosted-panel max-w-xl w-full p-6 sm:p-8 relative max-h-[92vh] overflow-y-auto" style="background-color: var(--card-glass-deep);">
+<div id="askCard" data-tilt data-tilt-max="2.5" class="frosted-panel max-w-xl w-full p-6 sm:p-8 relative max-h-[92vh] overflow-y-auto" style="background-color: var(--card-glass-deep);">
 <button type="button" id="askClose" onclick="closeAskModal()" aria-label="收起點餐單" class="float-right w-9 h-9 rounded-full border flex items-center justify-center text-base font-mono hover:scale-110 transition-transform" style="border-color: var(--border-dim); color: var(--accent-metal); background-color: rgba(0,0,0,0.45);">✕</button>
 <h3 id="askTitle" class="heisei-title text-2xl font-bold">點餐單</h3>
 <div class="ask-listhead">
